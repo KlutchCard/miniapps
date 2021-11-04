@@ -1,5 +1,15 @@
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 Template = (data, context) => {
   let { buttonDisabled, errorMessage } = context.state || { buttonDisabled: false, errorMessage: undefined }
+
+  if (buttonDisabled) {
+    return (
+      <Klutch.KView style={{ flex: 1, justifyContent: "center" }}>
+        <Klutch.KLoadingIndicator />
+      </Klutch.KView>
+    )
+  }
 
   return (
     <Klutch.KView style={{ flex: 1, padding: 5 }}>
@@ -10,12 +20,10 @@ Template = (data, context) => {
           buttonDisabled && { opacity: .5 }
         ]}
         onPress={async () => {
-          if (buttonDisabled) {
-            return
-          }
           context.setState({ errorMessage: undefined, buttonDisabled: true })
           try {
             const resp = await context.post("/card")
+            await delay(10 * 1000)
             context.redirect(`/cards/${resp.data.id}`)
           } catch (err) {
             context.setState({ errorMessage: "Cannot create more than 3 cards per day\nYou can only have 10 virtual cards" })

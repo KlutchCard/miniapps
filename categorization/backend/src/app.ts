@@ -55,10 +55,11 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
     const alloyEvent = JSON.parse(event.body)
     console.log("New Message:", JSON.stringify(alloyEvent))
     var panel = {}
+    const recipeInstallId = alloyEvent.principal.entityID  
 
     if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionCreatedEvent" ||
         alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent" ) {
-        const recipeInstallId = alloyEvent.principal.entityID  
+        
                 
         var amountPerCategory = await getAmountPerCategory(recipeInstallId)
         
@@ -67,6 +68,10 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
             panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null)       
         }         
         console.log("Finished")
+    }
+
+    if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent") { 
+        await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {}, null)       
     }
     return {
         statusCode: 200,

@@ -64,7 +64,7 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         
         console.log(amountPerCategory)
         if (amountPerCategory.length > 0) {
-            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null)       
+            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)       
         }         
         console.log("Finished")
     }
@@ -87,7 +87,7 @@ export const handleGetCategories = async (event: APIGatewayProxyEvent): Promise<
     const recipeInstallId = jwt["custom:principalId"]
     var amountPerCategory = await getAmountPerCategory(recipeInstallId)        
     if (amountPerCategory.length > 0) {
-        await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null)       
+        await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)       
     }  
     return {
         statusCode: 200,

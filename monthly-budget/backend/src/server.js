@@ -10,4 +10,4 @@ app.use(router)
 
 AlloyJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, klutchPublicKey })
 
-app.listen(port, () => console.log(`\nServer is running on port ${port}\tversion: ${version}`))
+app.listen(port, () => console.log(`Server is running on port ${port}\tversion: ${version}`))

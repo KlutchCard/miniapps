@@ -1,6 +1,5 @@
 {
   "name": "burner-card-server",
-  "version": "1.0.0",
   "license": "MIT",
   "description": "burner card miniapp server",
   "repository": "https://github.com/KlutchCard/miniapps",

@@ -1,4 +1,4 @@
-const styles = {
+  const styles = {
   loading: {
     flex: 1,
     justifyContent: "center",
@@ -106,7 +106,7 @@ Template = (data, context) => {
   return (
     <Klutch.KView key='container' style={styles.container}>
 
-      <Klutch.KScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <Klutch.ScrollView horizontal showsHorizontalScrollIndicator={false} >
         <Klutch.KView style={styles.squareContainer}>
           {budgets.map(budgetContainer)}
 
@@ -115,7 +115,7 @@ Template = (data, context) => {
           </Klutch.KPressable>
 
         </Klutch.KView >
-      </Klutch.KScrollView>
+      </Klutch.ScrollView>
 
     </Klutch.KView >
   )

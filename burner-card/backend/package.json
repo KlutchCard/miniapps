@@ -1,6 +1,5 @@
 {
   "name": "burner-card-server",
-  "version": "1.0.0",
   "license": "MIT",
   "description": "burner card miniapp server",
   "repository": "https://github.com/KlutchCard/miniapps",
@@ -8,7 +7,7 @@
     "start": "nodemon -r dotenv/config src/server.js"
   },
   "dependencies": {
-    "@klutchcard/alloy-js": "1.4.34",
+    "@klutchcard/alloy-js": "1.4.48",
     "express": "4.17.1",
     "http-status": "1.5.0",
     "jsonwebtoken": "8.5.1",

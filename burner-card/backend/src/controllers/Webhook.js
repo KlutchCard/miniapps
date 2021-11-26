@@ -33,7 +33,7 @@ const execWebhook = async (req, resp) => {
     try {
       const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
       GraphQLService.setAuthToken(recipeInstallToken)
-      await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {}, null)
+      await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {}, null, 60)
       console.log(`POST /webhook "${event._alloyCardType}" finished with success`)
       return resp.status(httpStatus.OK).json()
     } catch (err) {

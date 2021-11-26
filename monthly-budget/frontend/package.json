@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@klutchcard/alloy-js": "^1.4.48",
-    "@klutchcard/klutch-components": "^0.2.1-beta2",
+    "@klutchcard/klutch-components": "^0.2.4",
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/metro-config": "^0.1.61",
     "expo": "^42.0.0",

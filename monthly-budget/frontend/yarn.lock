@@ -2858,10 +2858,10 @@
     rxjs "^6.6.2"
     sqlite3 "^5.0.2"
 
-"@klutchcard/klutch-components@^0.2.1-beta2":
-  version "0.2.1-beta2"
-  resolved "https://npm.pkg.github.com/download/@klutchcard/klutch-components/0.2.1-beta2/ecc622103bca849783d5a6da6e4b475cda92b04b0695b957e00522afe306d4bb#dd1f51bb0feb15fa32da1c78e3da6796fe82a690"
-  integrity sha512-HdlXc45hzwhotwYLqRhoB62B7nqJJ3Lo4jO2o+i2V2SHM+luJtX9DV42veSZuMpyP/xCUG6dDry/7CAvaBBIBg==
+"@klutchcard/klutch-components@^0.2.4":
+  version "0.2.4"
+  resolved "https://npm.pkg.github.com/download/@klutchcard/klutch-components/0.2.4/772346c3b9a2ed81329f1b76eb8da6d6166b48dca7397af766a1e22e97a25c2e#214ba0cd57afa679bb039f6d360027874d61856d"
+  integrity sha512-zN1emwnlm4OkjtiKXy7/hvcqolguSZJUs+VM+9TIlzX/0G/fhQ4VdJvhggEA/vL9nL6Fmpo7v/OYbqDe3jShdg==
   dependencies:
     "@expo-google-fonts/inter" "^0.1.0"
     "@klutchcard/alloy-js" "1.4.41"

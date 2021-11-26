@@ -106,7 +106,11 @@ Template = (data, context) => {
   return (
     <Klutch.KView key='container' style={styles.container}>
 
-      <Klutch.KScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <Klutch.KScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        scrollContentStyle={{ minHeight: 0 }}
+      >
         <Klutch.KView style={styles.squareContainer}>
           {budgets.map(budgetContainer)}
 

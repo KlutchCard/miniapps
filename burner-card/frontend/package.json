@@ -10,8 +10,8 @@
     "watch-templates": "nodemon --watch templates --ext jsx --exec yarn build-templates"
   },
   "dependencies": {
-    "@alloycard/alloy-js": "1.4.15",
-    "@alloycard/klutch-components": "0.1.76",
+    "@klutchcard/alloy-js": "^1.4.56-beta",
+    "@klutchcard/klutch-components": "^0.3.1-beta",
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/metro-config": "^0.1.61",
     "expo": "^42.0.0",

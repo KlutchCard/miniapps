@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import AppLoading from 'expo-app-loading';
 import SimulationComponent from './SimulationComponent';
-import { KText, KButton, KScreen } from "@alloycard/klutch-components"
+import { KText, KButton, KScreen } from "@klutchcard/klutch-components"
 
 
 /* MINIAPP CONFIGURATION */

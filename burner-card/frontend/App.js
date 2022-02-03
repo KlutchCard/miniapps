@@ -51,7 +51,8 @@ export default function App() {
 
   const onLoadTemplate = (templateName, templateData) => {
     setTemplateData(templateData)
-    setTemplateToLoad(templateName)
+    const template = Object.keys(Templates).map(c => Templates[c]).find(c => c.filename == templateName)
+    setTemplateToLoad(template)
   }
 
   return (

@@ -2830,10 +2830,10 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
-"@klutchcard/alloy-js@1.4.41":
-  version "1.4.41"
-  resolved "https://npm.pkg.github.com/download/@klutchcard/alloy-js/1.4.41/193b8c77401d8dc5b8d1a3a398cc74a0ee9e87ea6012e97d394d3653e9431233#7c4e52ee6f4a468ec18a7bfcd0cdb35eeaf9eb86"
-  integrity sha512-cCkS1W2rec9HmvQ5tob5o6cOEPC0k+oA83CZOnIRBg39nnT1jCT3v+Ey6gNUoa/Qs7FSJui7BhvoznUDrj524g==
+"@klutchcard/alloy-js@^1.4.56-beta":
+  version "1.4.56"
+  resolved "https://npm.pkg.github.com/download/@klutchcard/alloy-js/1.4.56/446d5d7236801e15533e1b32fc824697df9c34613144716057388b2c138ee790#1aad306355e4fda5310569241a9b726aa36a2936"
+  integrity sha512-evQqRU+J4/ejjyrHAXCc53rkpaIZGHhoKelEW07HrEa4H8cLaHZ6NA0PCYzC+1tG8IgPiS/nYPJYLOChmiMnkQ==
   dependencies:
     "@apollo/client" "^3.3.19"
     axios "^0.21.1"
@@ -2844,27 +2844,13 @@
     rxjs "^6.6.2"
     sqlite3 "^5.0.2"
 
-"@klutchcard/alloy-js@^1.4.48":
-  version "1.4.48"
-  resolved "https://npm.pkg.github.com/download/@klutchcard/alloy-js/1.4.48/b88863e65f0c19032bca3a9989c3ffd1ba8ccd7926a33cbdcc11ef3ac753b3c9#7f51e0d3c5799222403fd59d19f9c471a149d7c1"
-  integrity sha512-46hZpBo3Bk0oax4HkJexSbt9WT4D9KZcyurKrTCU/h6l57K+w6eanwb2R6+2FcVwTk0mz+ivcnbfMhC3GXtsqQ==
-  dependencies:
-    "@apollo/client" "^3.3.19"
-    axios "^0.21.1"
-    base64url "^3.0.1"
-    cross-fetch "^3.0.6"
-    graphql "^15.3.0"
-    graphql-tag "^2.12.0"
-    rxjs "^6.6.2"
-    sqlite3 "^5.0.2"
-
-"@klutchcard/klutch-components@^0.2.4":
-  version "0.2.4"
-  resolved "https://npm.pkg.github.com/download/@klutchcard/klutch-components/0.2.4/772346c3b9a2ed81329f1b76eb8da6d6166b48dca7397af766a1e22e97a25c2e#214ba0cd57afa679bb039f6d360027874d61856d"
-  integrity sha512-zN1emwnlm4OkjtiKXy7/hvcqolguSZJUs+VM+9TIlzX/0G/fhQ4VdJvhggEA/vL9nL6Fmpo7v/OYbqDe3jShdg==
+"@klutchcard/klutch-components@^0.3.1-beta":
+  version "0.3.1-charlie"
+  resolved "https://npm.pkg.github.com/download/@klutchcard/klutch-components/0.3.1-charlie/209eec4f7b2f67c8040f8f4b03ae8e1040bc38cb8caa3a1e6a0c2f0059d013ad#51af2a8f641b546e0fa2aa87ee541bbdb3a24a8a"
+  integrity sha512-s4pr4/m8jwTxv5eEcuPAShvhknVfgdNkthr2rJRrOTI3wApGJd5VAWh+ZuDVTYe4/zWrhzqXMIfB3eIEKl1Bjw==
   dependencies:
     "@expo-google-fonts/inter" "^0.1.0"
-    "@klutchcard/alloy-js" "1.4.41"
+    "@klutchcard/alloy-js" "^1.4.56-beta"
     "@react-native-community/hooks" "^2.6.0"
     expo "^43.0.0"
     expo-haptics "~11.0.3"

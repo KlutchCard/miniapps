@@ -20,6 +20,9 @@ Parameters:
   PrivateKey:
     Type: String
     Description: MiniAppPrivateKey    
+  Port:
+    Type: Number
+    Description: port
   
 
 Resources:
@@ -37,6 +40,10 @@ Resources:
       ContainerDefinitions:
         - Name: "miniapps-ifthen"
           Image: !GetAtt MiniAppECR.RepositoryUri            
+          PortMappings:
+            - ContainerPort: !Ref Port
+              HostPort: !Ref Port
+              Protocol: tcp
           MemoryReservation: 512
           Environment: [
             { Name: DATABASE_URL, Value: !Ref DatabaseUrl },
@@ -44,6 +51,7 @@ Resources:
             { Name: KLUTCH_SERVER_URL, Value: !Ref KlutchServerUrl },
             { Name: PATH_KLUTCH_PUBLIC_KEY, Value: !Ref KlutchPublicKey},
             { Name: PATH_PRIVATE_KEY, Value: !Ref PrivateKey},            
+            { Name: PORT, Value: !Ref Port },
           ]
           LogConfiguration:
             LogDriver: awslogs

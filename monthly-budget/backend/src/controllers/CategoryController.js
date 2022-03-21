@@ -1,4 +1,4 @@
-const { RecipesService, GraphQLService, TransactionService } = require("@klutchcard/alloy-js")
+const { RecipesService, GraphQLService, TransactionService } = require("@klutch-card/klutch-js")
 const { getRecipeInstallId } = require("./BudgetController")
 const httpStatus = require('http-status');
 const { recipeId, privateKey } = require('../config/config')

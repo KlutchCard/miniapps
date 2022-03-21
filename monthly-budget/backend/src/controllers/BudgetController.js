@@ -4,7 +4,7 @@ const {
   TransactionService,
   TransactionType,
   TransactionStatus
-} = require("@klutchcard/alloy-js");
+} = require("@klutch-card/klutch-js");
 const httpStatus = require('http-status')
 const Ajv = require("ajv")
 const { upsertBudget, listBudgets, deleteBudget: findAndDeleteBudget } = require("../models/Budget")

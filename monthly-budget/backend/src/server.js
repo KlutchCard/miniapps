@@ -1,4 +1,4 @@
-const { AlloyJS } = require("@klutchcard/alloy-js")
+const { KlutchJS } = require("@klutch-card/klutch-js")
 const express = require('express')
 const { router } = require('./routes')
 const { port, klutchServerUrl, klutchPublicKey, version } = require('../src/config/config')
@@ -8,6 +8,6 @@ const app = express()
 app.use(express.json())
 app.use(router)
 
-AlloyJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, klutchPublicKey })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, klutchPublicKey })
 
 app.listen(port, () => console.log(`Server is running on port ${port}\tversion: ${version}`))

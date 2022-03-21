@@ -1,9 +1,9 @@
 "use strict";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Klutch from "./klutch.js";
-import {  RecipesService,    TransactionService, TransactionStatus, TransactionType} from "@klutchcard/alloy-js"
+import {  RecipesService,    TransactionService, TransactionStatus, TransactionType} from "@klutch-card/klutch-js"
 import  { DateTime } from "luxon"
-import { TransactionCategory } from "@klutchcard/alloy-js/lib/entities/TransactionCategory";
+import { TransactionCategory } from "@klutch-card/klutch-js/lib/entities/TransactionCategory";
 import { verify } from "jsonwebtoken";
 
 

@@ -57,15 +57,14 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
     var panel = {}
 
     if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionCreatedEvent" ||
-        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent" ) {
+        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent" ||
+        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent" ) {
         const recipeInstallId = alloyEvent.principal.entityID  
                 
         var amountPerCategory = await getAmountPerCategory(recipeInstallId)
         
         console.log(amountPerCategory)
-        if (amountPerCategory.length > 0) {
-            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)       
-        }         
+        panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)
         console.log("Finished")
     }
     return {

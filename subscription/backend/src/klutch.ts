@@ -1,4 +1,4 @@
-import AlloyJS, { GraphQLService, RecipePanel, RecipesService } from "@alloycard/alloy-js"
+import AlloyJS, { GraphQLService, RecipePanel, RecipesService } from "@klutch-card/klutch-js"
 import {KMS}  from "aws-sdk"
 import base64url from "base64url";
 

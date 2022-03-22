@@ -6,7 +6,6 @@ const execWebhook = async (req, resp) => {
   console.log("POST /webhook started")
 
   const { event, principal } = req.body
-  console.log(req.body)
 
   if (!event || !principal) {
     console.log(`payload is missing event or principal objects`)

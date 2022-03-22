@@ -62,8 +62,6 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         } else {
             panel = await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template", transactionData, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
         }
-        
-        console.log("Finished")
     }
 
     if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent") {
@@ -71,9 +69,9 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         await Klutch.auth(recipeInstallId)
         var token = event.headers["Authorization"] || event.headers["authorization"] || ""
         await refreshHomePanel(recipeInstallId, token)
-
-        console.log("Finished")
     }
+
+    console.log(`Finished handler ${alloyEvent.event._alloyCardType} webhook`)
 
     return {
         statusCode: 200,

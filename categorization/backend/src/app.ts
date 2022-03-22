@@ -65,7 +65,7 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         
         console.log(amountPerCategory)
         panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)
-        console.log("Finished")
+        console.log(`Finished handler ${alloyEvent.event._alloyCardType} webhook`)
     }
     return {
         statusCode: 200,

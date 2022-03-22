@@ -32,18 +32,14 @@ const execWebhook = async (req, resp) => {
 }
 
 const addPanelToHomeScreen = async (recipeInstallId) => {
-  try {
-    const panels = await RecipesService.getPanels(undefined)
-    const panelsRecipeInstallId = panels.map(p => p.recipeInstall.id)
+  const panels = await RecipesService.getPanels(undefined)
+  const panelsRecipeInstallId = panels.map(p => p.recipeInstall.id)
 
-    if (panelsRecipeInstallId.includes(recipeInstallId)) return
+  if (panelsRecipeInstallId.includes(recipeInstallId)) return
 
-    console.log(`adding home panel to recipeInstallId \"${recipeInstallId}\"`)
+  console.log(`adding home panel to recipeInstallId \"${recipeInstallId}\"`)
 
-    await RecipesService.addPanel(recipeInstallId, "/templates/HomePanel.template", { recipeId }, null)
-  } catch (err) {
-    console.log({ err, recipeInstallId })
-  }
+  await RecipesService.addPanel(recipeInstallId, "/templates/HomePanel.template", { recipeId }, null)
 }
 
 module.exports = { execWebhook }

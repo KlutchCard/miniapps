@@ -65,9 +65,8 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
     }
 
     if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent") {
-        const recipeInstallId = alloyEvent.recipeInstall.entityID
-        await Klutch.auth(recipeInstallId)
-        var token = event.headers["Authorization"] || event.headers["authorization"] || ""
+        const recipeInstallId = alloyEvent.principal.entityID
+        const token = await Klutch.auth(recipeInstallId)
         await refreshHomePanel(recipeInstallId, token)
     }
 

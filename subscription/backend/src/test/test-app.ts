@@ -1,10 +1,23 @@
-import chai from "chai";
+import chai, { expect } from "chai";
 import {getSubscriptions, klutchWebhook, newSubscription} from "../app.js"
 
 import Klutch from '../klutch.js'
 
 
 const recipeInstallId = process.env.testRecipeInstallId || ""
+
+const exampleRecipeInstallCreatedEvent = {
+  "principal": {
+    "_alloyCardType": "com.alloycard.core.entities.recipe.RecipeInstall",
+    "entityID": recipeInstallId
+  },
+  "event": {
+    "_alloyCardType": "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent",
+    "createdAt": 1629129978,
+    "eventId": "xpto"
+  },
+  "webhookUrl": "https://hld3dl71kh.execute-api.us-west-2.amazonaws.com/klutch-webhook"
+}
 
 const exampleTransactionEvent = {
             "_alloyCardType": "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
@@ -40,6 +53,12 @@ const exampleTransaction = {
 }
 
 describe('Tests SubscriptionManager', function () {
+
+    it("RecipeInstallCreatedEvent received on Webhook", async () => {
+        const recipeInstallCreatedEvent = JSON.stringify(exampleRecipeInstallCreatedEvent)
+        var resp = await klutchWebhook({ body: recipeInstallCreatedEvent } as any)
+        expect(resp.statusCode).to.be.equal(200)
+    })
 
     it("Transaction received on Webhook", async () => {        
         const transaction = JSON.stringify(exampleTransactionEvent)

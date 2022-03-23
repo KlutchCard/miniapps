@@ -1,5 +1,10 @@
-const { RecipesService } = require("@klutch-card/klutch-js")
+const {
+  GraphQLService,
+  RecipesService,
+} = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status')
+const { recipeId, privateKey } = require('../config/config')
+const { BuildJWTToken } = require('./helper')
 
 
 const execWebhook = async (req, resp) => {
@@ -32,14 +37,23 @@ const execWebhook = async (req, resp) => {
 }
 
 const addPanelToHomeScreen = async (recipeInstallId) => {
+  const templatePath = "/templates/HomePanel.template"
+
+  const recipeToken = BuildJWTToken(recipeId, privateKey)
+  GraphQLService.setAuthToken(recipeToken)
+  const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
+  GraphQLService.setAuthToken(recipeInstallToken)
+
   const panels = await RecipesService.getPanels(undefined)
-  const panelsRecipeInstallId = panels.map(p => p.recipeInstall.id)
+  const panel = panels.find(p => (p.recipeInstall.id === recipeInstallId && p.templateFile.fileName === templatePath))
 
-  if (panelsRecipeInstallId.includes(recipeInstallId)) return
+  if (panel) {
+    console.log(`home panel ${panel.id} already exists`)
+    return
+  }
 
-  console.log(`adding home panel to recipeInstallId \"${recipeInstallId}\"`)
-
-  await RecipesService.addPanel(recipeInstallId, "/templates/HomePanel.template", { recipeId }, null)
+  const recipePanel = await RecipesService.addPanel(recipeInstallId, templatePath, { recipeId }, null)
+  console.log(`home panel ${recipePanel.id} added`)
 }
 
 module.exports = { execWebhook }

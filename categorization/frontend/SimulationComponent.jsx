@@ -1,4 +1,4 @@
-import * as Klutch from '@alloycard/klutch-components';
+import * as Klutch from '@klutch-card/klutch-components';
 import { Asset } from 'expo-asset';
 import React, { useEffect, useState, useCallback } from "react";
 import equal from "deep-equal";
@@ -115,7 +115,7 @@ const SimulationComponent =  ({serverUrl, token, template, type, name, data, onL
         const React = react
         const { DateTime } = require("luxon");
         const Victory = require("victory-native")
-        const AlloyJS = require("@alloycard/alloy-js")
+        const AlloyJS = require("@klutch-card/klutch-js")
         return r(data, simulationContext)
     }
 

@@ -3,8 +3,8 @@ import {View} from "react-native";
 import { useFonts, Inter_400Regular, Inter_600SemiBold,  Inter_700Bold  } from '@expo-google-fonts/inter';
 import AppLoading from 'expo-app-loading';
 import SimulationComponent from './SimulationComponent';
-import {KText, KButton, KScreen} from "@alloycard/klutch-components"
-import AlloyJS, { AuthService, GraphQLService} from '@alloycard/alloy-js';
+import {KText, KButton, KScreen} from "@klutch-card/klutch-components"
+import AlloyJS, { AuthService, GraphQLService} from '@klutch-card/klutch-js';
 import Constants from 'expo-constants';
 import {gql} from "graphql-tag"
 

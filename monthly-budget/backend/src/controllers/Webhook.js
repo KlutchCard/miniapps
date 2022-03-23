@@ -37,22 +37,13 @@ const execWebhook = async (req, resp) => {
 }
 
 const addPanelToHomeScreen = async (recipeInstallId) => {
-  const templatePath = "/templates/HomePanel.template"
-
-  const recipeToken = BuildJWTToken(recipeId, privateKey)
-  GraphQLService.setAuthToken(recipeToken)
+  GraphQLService.setAuthToken(BuildJWTToken(recipeId, privateKey))
   const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
   GraphQLService.setAuthToken(recipeInstallToken)
 
-  const panels = await RecipesService.getPanels(undefined)
-  const panel = panels.find(p => (p.recipeInstall.id === recipeInstallId && p.templateFile.fileName === templatePath))
+  const recipePanel = await RecipesService.addPanel(
+    recipeInstallId, "/templates/HomePanel.template", { recipeId }, null)
 
-  if (panel) {
-    console.log(`home panel ${panel.id} already exists`)
-    return
-  }
-
-  const recipePanel = await RecipesService.addPanel(recipeInstallId, templatePath, { recipeId }, null)
   console.log(`home panel ${recipePanel.id} added`)
 }
 

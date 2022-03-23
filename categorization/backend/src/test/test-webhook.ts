@@ -34,7 +34,7 @@ const exampleTransactionEvent = {
   }
 
 describe('Tests SubscriptionManager', function () {
-  it.only("RecipeInstallCreated event received on Webhook", async () => {
+  it("RecipeInstallCreated event received on Webhook", async () => {
     const transaction = JSON.stringify(exampleRecipeInstallCreatedEvent)
     var resp = await handleWebhook({
       body: transaction

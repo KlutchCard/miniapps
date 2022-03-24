@@ -1,4 +1,4 @@
-import * as Klutch from '@klutchcard/klutch-components';
+import * as Klutch from '@klutch-card/klutch-components';
 import { Asset } from 'expo-asset';
 import React, { useEffect, useState } from "react";
 import axios from 'axios'

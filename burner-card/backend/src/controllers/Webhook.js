@@ -5,7 +5,7 @@ const {
   CardsService,
   Card,
   CardTerminateReason,
-  TransactionType } = require("@klutchcard/alloy-js")
+  TransactionType } = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const { BuildJWTToken } = require("./helper")
 const { recipeInstallCreatedEventType, transactionCreatedEventType } = require('../../config')

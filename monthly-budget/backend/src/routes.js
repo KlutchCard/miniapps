@@ -4,14 +4,19 @@ const httpStatus = require('http-status')
 const { klutchServerUrl, database, version } = require("../src/config/config")
 const { createOrUpdateBudget, getBudgets, deleteBudget } = require('./controllers/BudgetController')
 const { listCategories } = require('./controllers/CategoryController')
+const { execWebhook } = require("./controllers/Webhook")
 const connection = require('./database/index')
 
 const router = Router()
 
 router.get("/category", listCategories)
+
 router.put("/budget", createOrUpdateBudget)
 router.get("/budget", getBudgets)
 router.delete("/budget/:id", deleteBudget)
+
+router.post("/webhook", execWebhook)
+
 router.get("/health", async (req, resp) => {
   console.log(`GET /health started\nversion: ${version}`)
 

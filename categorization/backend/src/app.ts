@@ -1,9 +1,9 @@
 "use strict";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Klutch from "./klutch.js";
-import {  RecipesService,    TransactionService, TransactionStatus, TransactionType} from "@klutchcard/alloy-js"
+import {  RecipesService,    TransactionService, TransactionStatus, TransactionType} from "@klutch-card/klutch-js"
 import  { DateTime } from "luxon"
-import { TransactionCategory } from "@klutchcard/alloy-js/lib/entities/TransactionCategory";
+import { TransactionCategory } from "@klutch-card/klutch-js/lib/entities/TransactionCategory";
 import { verify } from "jsonwebtoken";
 
 
@@ -57,16 +57,15 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
     var panel = {}
 
     if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionCreatedEvent" ||
-        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent" ) {
+        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent" ||
+        alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent" ) {
         const recipeInstallId = alloyEvent.principal.entityID  
                 
         var amountPerCategory = await getAmountPerCategory(recipeInstallId)
         
         console.log(amountPerCategory)
-        if (amountPerCategory.length > 0) {
-            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)       
-        }         
-        console.log("Finished")
+        panel = await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)
+        console.log(`Finished handler ${alloyEvent.event._alloyCardType} webhook`)
     }
     return {
         statusCode: 200,

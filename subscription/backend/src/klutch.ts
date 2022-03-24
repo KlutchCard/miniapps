@@ -1,4 +1,4 @@
-import AlloyJS, { GraphQLService, RecipePanel, RecipesService } from "@alloycard/alloy-js"
+import KlutchJS, { GraphQLService, RecipePanel, RecipesService } from "@klutch-card/klutch-js"
 import {KMS}  from "aws-sdk"
 import base64url from "base64url";
 
@@ -15,7 +15,7 @@ export default new class Klutch {
 
 
     constructor() {
-        AlloyJS.configure({
+        KlutchJS.configure({
             serverUrl: this.serverUrl
         })
     }

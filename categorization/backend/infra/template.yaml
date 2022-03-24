@@ -24,7 +24,7 @@ Resources:
   WebhookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: dist/
+      CodeUri: ../dist/
       Handler: app.handleWebhook
       Runtime: nodejs14.x
       Timeout: 10
@@ -55,7 +55,7 @@ Resources:
   GetCategoriesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: dist/
+      CodeUri: ../dist/
       Handler: app.handleGetCategories
       Runtime: nodejs14.x
       Timeout: 10

@@ -1,6 +1,6 @@
 "use strict";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import {AlloyEvent, Entity, GraphQLService, RecipesService, Transaction, TransactionService} from "@alloycard/alloy-js"
+import {AlloyEvent, Entity, GraphQLService, RecipesService, Transaction, TransactionService} from "@klutch-card/klutch-js"
 import Klutch from "./klutch.js";
 import db from "./db.js"
 import auth from "./auth.js"
@@ -62,9 +62,16 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         } else {
             panel = await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template", transactionData, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
         }
-        
-        console.log("Finished")
     }
+
+    if (alloyEvent.event._alloyCardType == "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent") {
+        const recipeInstallId = alloyEvent.principal.entityID
+        const token = await Klutch.auth(recipeInstallId)
+        await refreshHomePanel(recipeInstallId, token)
+    }
+
+    console.log(`Finished handler ${alloyEvent.event._alloyCardType} webhook`)
+
     return {
         statusCode: 200,
         body: JSON.stringify(panel)

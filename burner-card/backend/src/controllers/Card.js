@@ -1,9 +1,15 @@
 const httpStatus = require('http-status')
-const { GraphQLService, RecipesService, CardsService, TransactionService, CardMedia } = require("@klutchcard/alloy-js");
-const { BuildJWTToken, DecodeToken } = require('./helper');
-const BurnerCard = require('../models/Card');
+const {
+  GraphQLService,
+  RecipesService,
+  CardsService,
+  TransactionService,
+  CardMedia
+} = require("@klutchcard/alloy-js")
+const { BuildJWTToken, DecodeToken } = require('./helper')
+const BurnerCard = require('../models/Card')
 const { klutchServerUrl } = require("../../config")
-const { AlloyJS } = require('@klutchcard/alloy-js');
+const { AlloyJS } = require('@klutchcard/alloy-js')
 
 AlloyJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 

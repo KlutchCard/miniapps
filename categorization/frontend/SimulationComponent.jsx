@@ -29,7 +29,6 @@ const SimulationComponent =  ({serverUrl, token, template, type, name, data, onL
 
     useEffect(() => {
         if (initCallback) {
-            console.log("DOING")
             if (isPromise(initCallback)) {
                 initCallback.then()
             } else {

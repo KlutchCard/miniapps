@@ -1,7 +1,7 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "concurrently \"expo start\" \"yarn watch-templates\"",
+    "start": "concurrently \"expo start --tunnel\" \"yarn watch-templates\"",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -10,8 +10,8 @@
     "watch-templates": "nodemon --watch templates --ext jsx --exec yarn build-templates"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.9",
-    "@klutch-card/klutch-components": "^0.3.4",
+    "@klutch-card/klutch-js": "^1.5.14",
+    "@klutch-card/klutch-components": "^0.3.5",
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/metro-config": "^0.1.61",
     "axios": "^0.21.1",

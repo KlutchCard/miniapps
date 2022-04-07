@@ -11,7 +11,7 @@ const placeHolderData = {
 Template = (data, context) => {
 
 
-    if (!data || !data.amountPerCategory || data.amountPerCategory.length == 0) {
+    if (!data || !data.amountPerCategory || data.amountPerCategory.length <= 1) {
         data = placeHolderData       
     } 
     var allCategories = data.amountPerCategory

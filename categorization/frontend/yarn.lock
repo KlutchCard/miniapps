@@ -2874,10 +2874,10 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
-"@klutch-card/klutch-components@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-components/-/klutch-components-0.3.4.tgz#2078fb6f7de19b6fefab5b51b43b560867908140"
-  integrity sha512-Uefa6UunHYerGMYhYQ9jKObkziOii03CMnqO7TmFdzrzR8Pd+kNytpsAUOe6YYrvUeylftDPCdxnzJxzbZGrwg==
+"@klutch-card/klutch-components@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-components/-/klutch-components-0.3.5.tgz#87031a6f25cc930c9bf015fe6dbc8964738aa2bd"
+  integrity sha512-qGk3+wdPb7LrNMoLbClMgb5sqv3CxRzQ8UqoG6PmFvAnoD8xHR+VvLtQjku4RMULXLMXSSIg4JnXFiuTfzof6A==
   dependencies:
     "@expo-google-fonts/inter" "^0.1.0"
     "@klutch-card/klutch-js" "^1.5.7"
@@ -2890,7 +2890,21 @@
     react-native-svg "12.1.1"
     react-router-native "^5.2.0"
 
-"@klutch-card/klutch-js@^1.5.7", "@klutch-card/klutch-js@^1.5.9":
+"@klutch-card/klutch-js@^1.5.14":
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-js/-/klutch-js-1.5.14.tgz#a01302249976a8c3a1598281118519b7f75fc51b"
+  integrity sha512-3V/KOLwYOMVfnHwFfF9sNInPOEad59nlxRwUBxGKiuNTGWIYir1YjNNQBqn89h5OqCE2k4Fdzj52oPr5ZWHJmg==
+  dependencies:
+    "@apollo/client" "^3.5.8"
+    axios "^0.21.1"
+    base64url "^3.0.1"
+    cross-fetch "^3.0.6"
+    graphql "^15.3.0"
+    graphql-tag "^2.12.0"
+    rxjs "^6.6.2"
+    sqlite3 "^5.0.2"
+
+"@klutch-card/klutch-js@^1.5.7":
   version "1.5.9"
   resolved "https://registry.yarnpkg.com/@klutch-card/klutch-js/-/klutch-js-1.5.9.tgz#a5de8d14a8ecdc4345fa31c3a87ba7354fbb8aaa"
   integrity sha512-gshjGp+Q9aAIh0aVqxwVpbX1fszSLF9efOwbnnyLdsIAfUUkWqVaAmzJwl7EBStj1/vgTVzCIIB9iUx3CqevyA==

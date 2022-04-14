@@ -10,7 +10,7 @@
     "watch-templates": "nodemon --watch templates --ext jsx --exec yarn build-templates"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.14",
+    "@klutch-card/klutch-js": "^1.5.16",
     "@klutch-card/klutch-components": "^0.3.5",
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/metro-config": "^0.1.61",

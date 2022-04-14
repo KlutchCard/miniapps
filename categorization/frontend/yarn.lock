@@ -2874,10 +2874,10 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
-"@klutch-card/klutch-components@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-components/-/klutch-components-0.3.5.tgz#87031a6f25cc930c9bf015fe6dbc8964738aa2bd"
-  integrity sha512-qGk3+wdPb7LrNMoLbClMgb5sqv3CxRzQ8UqoG6PmFvAnoD8xHR+VvLtQjku4RMULXLMXSSIg4JnXFiuTfzof6A==
+"@klutch-card/klutch-components@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-components/-/klutch-components-0.3.6.tgz#064aae66888ebc779e9f5d342a5f0f9e022405f2"
+  integrity sha512-RxvQzB1d/KlDK4y51KgZzfXbiUXhSihflDu+yfSwddQciurPTwExpn5G5FqsAB9VtZm9ZrXWUsrgiRyQfjb8YQ==
   dependencies:
     "@expo-google-fonts/inter" "^0.1.0"
     "@klutch-card/klutch-js" "^1.5.7"

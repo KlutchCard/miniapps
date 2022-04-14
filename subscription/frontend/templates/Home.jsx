@@ -13,7 +13,7 @@ Template = (data, context) => {
                 </Klutch.KText>
         </Klutch.KView>
             <Klutch.KView style={st.secondColumn}>
-                {(data.subscriptions || []) ? data.subscriptions.map(s => (
+                {(data.subscriptions || []).length > 0 ? data.subscriptions.map(s => (
                     <Klutch.KView key={s.subscriptionId} style={st.subscriptionRow}>
                         <Klutch.KView style={st.nameLine}>                        
                             <Klutch.KText fontWeight="semibold">{s.name}</Klutch.KText>                        
@@ -21,11 +21,10 @@ Template = (data, context) => {
                         </Klutch.KView>
                         <Klutch.KText>{DateTime.fromISO(s.nextPayment).toFormat('LLL dd')}</Klutch.KText>
                     </Klutch.KView>
-                ))
-                 : 
-                    <>
-                        {/* Add to see upcoming payments */}
-                    </>
+                )) :
+                    <Klutch.KView style={{flex: 1, justifyContent: "center" }}>
+                        <Klutch.KText style={{textAlign:"center"}}>{`Add to see\nupcoming payments`}</Klutch.KText>                        
+                    </Klutch.KView>
                 }
             </Klutch.KView>
 

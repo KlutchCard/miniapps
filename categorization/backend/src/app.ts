@@ -87,7 +87,7 @@ export const handleGetCategories = async (event: APIGatewayProxyEvent): Promise<
         token = token.substr(7)
     }
 
-    console.log("KLUTCHKEY", KLUTCH_PUBLIC_KEY)
+    
 
     
     const jwt = verify(token, KLUTCH_PUBLIC_KEY, {algorithms: ["RS256"]}) as any

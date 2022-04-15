@@ -54,7 +54,7 @@ Template = (data, context) => {
                     origin={{x: 60, y: 55}}
                     padding={0} />
                 </Klutch.KView>                  
-                <Klutch.KView style={{flex: 1, paddingVertical: 10}}>
+                <Klutch.KView style={{flex: 1}}>
                     {(chartData).map((c, i) => (
                         <Klutch.KView key={c.x} style={{flexDirection: "row", justifyContent: "space-between", paddingVertical: 5}}>
                             <Klutch.KView style={{flexDirection:"row", alignItems: "center", marginBottom: 3}}>

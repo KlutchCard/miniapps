@@ -10,11 +10,11 @@
     "watch-templates": "nodemon --watch templates --ext jsx --exec yarn build-templates"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.9",
-    "@klutch-card/klutch-components": "^0.3.4",
+    "@klutch-card/klutch-js": "^1.5.16",
+    "@klutch-card/klutch-components": "^0.3.6",
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo/metro-config": "^0.1.61",
-    "expo": "~40.0.0",
+    "expo": "~42.0.0",
     "expo-app-loading": "^1.0.1",
     "expo-asset": "~8.2.1",
     "expo-file-system": "~9.3.0",

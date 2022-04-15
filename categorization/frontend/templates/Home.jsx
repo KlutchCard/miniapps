@@ -1,8 +1,8 @@
 const placeHolderData = {
     amountPerCategory: [
-        {amount: 0, category: {name: "GROCERIES"}},
-        {amount: 0, category: {name: "RESTAURANTS"}},
-        {amount: 0, category: {name: "TRAVEL"}},
+        {amount: 10, category: {name: "GROCERIES"}},
+        {amount: 20.95, category: {name: "RESTAURANTS"}},
+        {amount: 50.01, category: {name: "TRAVEL"}},
         {amount: 0, category: {name: "TRANSPORT"}},        
     ],
     placeholder: true
@@ -14,6 +14,10 @@ Template = (data, context) => {
     if (!data || !data.amountPerCategory || data.amountPerCategory.length <= 1) {
         data = placeHolderData       
     } 
+
+    const monthlySpent = data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0)
+    const month = DateTime.now().toFormat('LLL');
+
     var allCategories = data.amountPerCategory
         .sort((x, y) => y.amount - x.amount)    
 
@@ -42,16 +46,16 @@ Template = (data, context) => {
                     colorScale={data.placeholder ? ["#2050C740"] : colors}                             
                     containerComponent={<Victory.VictoryContainer responsive={false}   />}   
                     data={data.placeholder ? [{x: "NONE", y: 100}]  : chartData} 
-                    labels={() => null} 
+                    labels={() => `$ ${monthlySpent.toFixed(2)}\n${month}`}
                     radius={60}                       
-                    origin={{x: 60, y: 75}}
-                    innerRadius={40}            
+                    innerRadius={45}
+                    origin={{x: 60, y: 70}}
                     padding={0} />
                 </Klutch.KView>                  
-                <Klutch.KView style={{flex: 1, justifyContent: "flex-start"}}>
+                <Klutch.KView style={{flex: 1, justifyContent: "space-between", paddingVertical: 10}}>
                     {(chartData).map((c, i) => (
                         <Klutch.KView key={c.x} style={{flexDirection: "row", justifyContent: "space-between", paddingVertical: 5}}>
-                            <Klutch.KView style={{flexDirection:"row", justifyContent: "flex-start", alignItems: "center"}}>
+                            <Klutch.KView style={{flexDirection:"row", alignItems: "center"}}>
                                 <Klutch.KView style={{width: 10, height: 10, backgroundColor: colors[i], marginRight: 10}}/>
                                 <Klutch.KText>{c.x}</Klutch.KText>
                             </Klutch.KView>

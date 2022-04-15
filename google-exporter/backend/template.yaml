@@ -54,6 +54,10 @@ Resources:
               }             
             ]
           }
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref GoogleOAuthSecret     
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccessTokenTable        
       Environment: 
         Variables:
           klutchKey: !Ref RecipeKey

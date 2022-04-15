@@ -39,6 +39,15 @@ Resources:
               }             
             ]
           }
+        - Version: 2012-10-17
+          Statement: 
+            - Sid: DynamoQuery
+              Effect: Allow
+              Action: 
+                - dynamodb:Query
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+              Resource: !GetAtt RecurringTransferTable.Arn          
       Environment: 
         Variables:
           klutchKey: !Ref RecipeKey
@@ -174,7 +183,7 @@ Resources:
             - Sid: KMSSign
               Effect: Allow
               Action: kms:Sign
-              Resource: !GetAtt RecipeKey.Arn                        
+              Resource: !GetAtt RecipeKey.Arn
         - Version: 2012-10-17
           Statement: 
             - Sid: DynamoQuery

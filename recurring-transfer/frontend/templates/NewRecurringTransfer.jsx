@@ -20,7 +20,7 @@ Template = (data, context) => {
     if (context.state.transferSources.length == 0) {
         return (
             <>
-                <K.KHeader showBackArrow>SCHEDULE WEEKLY</K.KHeader>  
+                <K.KHeader showBackArrow>SCHEDULE TRANSFER</K.KHeader>  
                 <K.KText>Please Link Bank Account first in order to schedule payments</K.KText>
                 <K.KButtonBar>
                     <K.KButton type="primary" label="Link Bank Account" link="/transfers"/> 
@@ -61,7 +61,7 @@ Template = (data, context) => {
 
     return (
         <>
-            <K.KHeader showBackArrow>SCHEDULE {data.type}</K.KHeader>            
+            <K.KHeader showBackArrow onBackArrowPressed={() => context.loadTemplate("/templates/Main.template", {})}>SCHEDULE TRANSFER</K.KHeader>            
             {data.type == "lowbalance" && (
             <K.KView>
                 <K.KText style={{fontSize: 15}}>When balance below:</K.KText>
@@ -89,7 +89,7 @@ Template = (data, context) => {
                 <K.KText style={{fontSize: 15}} fontWeight="bold">Transfer from {context.state.transferSources[0].name}</K.KText>
             </K.KView>
             <K.KText style={{color: "red"}}>{context.state.error}</K.KText>
-            <K.KText style={{fontSize: 11, marginVertical: 20, textAlign: "justify" }}>By pressing the "accept and complete" button below, I hereby authorize Lambda Financial Technologies Inc. (“Klutch”) to initiate an ACH transfer from the account above. I certify that I am authorized to initiate this transfer and it complies with applicable laws. This authorization is to remain in full force and effect until I notify Klutch at support@klutchcard.com that I wish to revoke it. I understand that Klutch must be provided sufficient time to have a reasonable opportunity to act upon my notice to revoke this authorization.</K.KText>            
+            <K.KText style={{fontSize: 11, marginVertical: 20, textAlign: "left" }}>By pressing the "accept and complete" button below, I hereby authorize Lambda Financial Technologies Inc. (“Klutch”) to initiate an ACH transfer from the account above. I certify that I am authorized to initiate this transfer and it complies with applicable laws. This authorization is to remain in full force and effect until I notify Klutch at support@klutchcard.com that I wish to revoke it. I understand that Klutch must be provided sufficient time to have a reasonable opportunity to act upon my notice to revoke this authorization.</K.KText>            
             <K.KButtonBar>
                 <K.KButton type="primary" 
                     label="Accept and Complete" 

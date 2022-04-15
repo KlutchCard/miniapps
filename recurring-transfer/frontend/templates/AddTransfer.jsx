@@ -6,7 +6,7 @@ Template = (data, context) => {
 
     return (
         <>
-            <K.KHeader showBackArrow>SCHEDULE TRANSFERS</K.KHeader>            
+            <K.KHeader showBackArrow onBackArrowPressed={() => context.loadTemplate("/templates/Main.template", {})}>SCHEDULE TRANSFERS</K.KHeader>            
             <K.KPressable onPress={() => context.loadTemplate("/templates/NewRecurringTransfer.template", {type: "weekly"})}>
                 <K.KView style={s.viewBox}>
                     <K.KText fontWeight="semibold" style={s.title}>Weekly</K.KText>

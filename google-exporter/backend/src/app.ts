@@ -1,13 +1,15 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import {SecretsManager} from "aws-sdk"
 import { setImmediate } from "timers";
-import {Transaction} from "@klutchcard/alloy-js"
+import {Transaction, TransactionStatus} from "@klutchcard/alloy-js"
 
 
 const axios = require('axios').default;
 const sheets = require('./sheets.js');
 const dynamo = require('./dynamo.js')
-const alloy = require('./alloy.js')
+const alloy = require('./alloy.js');
+
+const {DateTime} = require('luxon');
 
 const secretManager = new SecretsManager({region: process.env.AWS_REGION});
 
@@ -61,7 +63,7 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         }); 
 
 
-        const row = [t.transactionDate, t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]
+        const row = [DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]
         const sheetRow = await sheets.insertLine(resp.data, googleCredentials.Item.sheetId, row)
         const panel = await alloy.addTransactionPanel(alloyKey, recipeId, recipeInstallId, "/templates/Transaction.template", {transaction: t, ...sheetRow}, t.id)        
         return {
@@ -129,23 +131,27 @@ export const oauthRedirect = async (event: APIGatewayProxyEvent): Promise<APIGat
 
     const sheet = await sheets.createSheet(resp.data, state.sheetName, headers)
 
-    if (resp.refresh_token) {
-        await dynamo.insert(tableName, {id: state.recipeInstallId,  sheetId: sheet.spreadsheetId,   ...resp.data})     
+
+    if (resp.data.refresh_token) {
+        const toInsert = {id: state.recipeInstallId,  sheetId: sheet.spreadsheetId,   ...resp.data}
+        await dynamo.insert(tableName, toInsert)     
     } else {
         const googleCredentials = await dynamo.findById(tableName, state.recipeInstallId)
-        await dynamo.insert(tableName, {id: state.recipeInstallId,  sheetId: sheet.spreadsheetId,   ...googleCredentials.Item})     
+        const toInsert = {id: state.recipeInstallId,  sheetId: sheet.spreadsheetId,   ...googleCredentials.Item}
+        await dynamo.insert(tableName, toInsert )     
     }
     
     
 
-    const transactions: Transaction[] = await alloy.getAllTransactions(alloyKey, recipeId, state.recipeInstallId)
+    var transactions: Transaction[] = await alloy.getAllTransactions(alloyKey, recipeId, state.recipeInstallId)
     
-    
+    transactions = transactions.filter(t => t.transactionStatus == TransactionStatus.SETLLED).sort((a, b) => a.transactionDate.getTime() - b.transactionDate.getTime())
+
     const newSheet = sheet.sheetsByIndex[0]
     var rows = []
     for (let t of transactions) {
         try {
-            rows.push([t.transactionDate, t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
+            rows.push([DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
         } catch (e) {
             console.error("ERROR", e)
         }

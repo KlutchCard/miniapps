@@ -44,7 +44,7 @@ const st = {
     },
     ymtd: {
         fontSize: 15,
-        marginBottom: 8
+        marginBottom: 13
     }, 
     secondColumn: {
         flex: 1,

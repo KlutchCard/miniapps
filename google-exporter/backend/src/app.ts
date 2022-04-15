@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import {SecretsManager} from "aws-sdk"
 import { setImmediate } from "timers";
-import {Transaction, TransactionStatus} from "@klutchcard/alloy-js"
+import {Transaction, TransactionStatus} from "@klutch-card/klutch-js"
 
 
 const axios = require('axios').default;
@@ -55,21 +55,23 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         params.append('refresh_token', googleCredentials.Item.refresh_token)
     
     
-    
-        const resp = await axios.post('https://oauth2.googleapis.com/token', params, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }); 
-
-
-        const row = [DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]
-        const sheetRow = await sheets.insertLine(resp.data, googleCredentials.Item.sheetId, row)
-        const panel = await alloy.addTransactionPanel(alloyKey, recipeId, recipeInstallId, "/templates/Transaction.template", {transaction: t, ...sheetRow}, t.id)        
-        return {
-            statusCode: 200,
-            body: JSON.stringify(panel)
-        }    
+        try {
+            const resp = await axios.post('https://oauth2.googleapis.com/token', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }); 
+        
+            const row = [DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]
+            const sheetRow = await sheets.insertLine(resp.data, googleCredentials.Item.sheetId, row)
+            const panel = await alloy.addTransactionPanel(alloyKey, recipeId, recipeInstallId, "/templates/Transaction.template", {transaction: t, ...sheetRow}, t.id)        
+            return {
+                statusCode: 200,
+                body: JSON.stringify(panel)
+            }    
+        } catch (e) {
+            console.error(e)
+        }        
     }
     return {
         statusCode: 200,

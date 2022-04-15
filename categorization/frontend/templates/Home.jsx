@@ -1,8 +1,8 @@
 const placeHolderData = {
     amountPerCategory: [
-        {amount: 10, category: {name: "GROCERIES"}},
-        {amount: 20.95, category: {name: "RESTAURANTS"}},
-        {amount: 50.01, category: {name: "TRAVEL"}},
+        {amount: 0, category: {name: "GROCERIES"}},
+        {amount: 0, category: {name: "RESTAURANTS"}},
+        {amount: 0, category: {name: "TRAVEL"}},
         {amount: 0, category: {name: "TRANSPORT"}},        
     ],
     placeholder: true
@@ -58,7 +58,7 @@ Template = (data, context) => {
                     {(chartData).map((c, i) => (
                         <Klutch.KView key={c.x} style={{flexDirection: "row", justifyContent: "space-between", paddingVertical: 5}}>
                             <Klutch.KView style={{flexDirection:"row", alignItems: "center", marginBottom: 3}}>
-                                <Klutch.KView style={{width: 10, height: 10, backgroundColor: colors[i], marginRight: 10}}/>
+                                <Klutch.KView style={{width: 10, height: 10, borderRadius: 2, backgroundColor: colors[i], marginRight: 10}}/>
                                 <Klutch.KText>{c.x}</Klutch.KText>
                             </Klutch.KView>
                             <Klutch.KText>{c.y}</Klutch.KText>

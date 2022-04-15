@@ -1,7 +1,7 @@
 
 const base64url = require("base64url");
 
-const AlloyJS = require("@klutchcard/alloy-js") 
+const AlloyJS = require("@klutch-card/klutch-js") 
 
 const {KMS} =  require('aws-sdk')    
 

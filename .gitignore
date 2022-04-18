@@ -113,3 +113,5 @@ dist
 **/testDist/*
 
 local.vars.json
+
+*/**/.vscode/

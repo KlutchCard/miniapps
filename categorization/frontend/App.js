@@ -20,14 +20,13 @@ const Templates = {
 }
 
 const initialData = {
-  transaction: {
-      id: "0d2b05d9-68fd-4dd3-a354-25199bd55d48",
-      merchantName: "Sport's Academy",
-      cardName: "Shopping Card",
-      amount: 453.20,
-      category: "SHOPPING",
-      date: new Date("2021-03-25T11:43:23Z")                
-  }    
+  amountPerCategory: [
+      {amount: 10, category: {name: "GROCERIES"}},
+      {amount: 20.95, category: {name: "RESTAURANTS"}},
+      {amount: 50.01, category: {name: "TRAVEL"}},
+      {amount: 0, category: {name: "TRANSPORT"}},        
+  ],
+  placeholder: true
 }
 
 const RECIPEID = "6df7fd21-adb7-407c-8b27-9dfa99ee9f67"

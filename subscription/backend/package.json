@@ -9,7 +9,7 @@
     "start": "tsc --watch",
     "build": "tsc",
     "test": "tsc; mocha -r dotenv/config --recursive --timeout=100000 ./dist",
-    "postbuild": "cp package.json  dist/ && cp .yarnrc  dist/ && cd dist && yarn install --production"
+    "postbuild": "yarn install --modules-folder ./dist/node_modules --production"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.75",

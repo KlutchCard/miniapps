@@ -20,7 +20,7 @@ async function getAmountPerCategory(recipeInstallId: string) {
         
     const startDate = DateTime.now().startOf('month').toJSDate()
     const endDate = DateTime.now().endOf('month').toJSDate()
-    const transactionData = await TransactionService.getTransactionsWithFilter({startDate, endDate, transactionTypes: [TransactionType.PAYMENT, TransactionType.REFUND], transactionStatus: [TransactionStatus.PENDING, TransactionStatus.SETLLED]})
+    const transactionData = await TransactionService.getTransactionsWithFilter({startDate, endDate, transactionTypes: [TransactionType.CHARGE, TransactionType.REFUND], transactionStatus: [TransactionStatus.PENDING, TransactionStatus.SETLLED]})
     const uncategorized = {category: {id: "uncategorized", name: "UNCATEGORIZED"}, amount: 0, count: 0}
 
     const amountPerCategory: Array<AmountPerCategory> = transactionData.reduce((acc, curr) => {
@@ -86,6 +86,9 @@ export const handleGetCategories = async (event: APIGatewayProxyEvent): Promise<
     if (token.startsWith("Bearer ")) {
         token = token.substr(7)
     }
+
+    
+
     
     const jwt = verify(token, KLUTCH_PUBLIC_KEY, {algorithms: ["RS256"]}) as any
     const recipeInstallId = jwt["custom:principalId"]

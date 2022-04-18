@@ -8,8 +8,8 @@
   "scripts": {
     "start": "tsc --watch",
     "build": "tsc",
-    "test": "rm -rfd dist/; tsc; mocha -r dotenv/config --recursive --timeout=100000 ./dist",
-    "postbuild": "cp package.json  dist/ && cp .yarnrc  dist/ && cd dist && yarn install --production"
+    "test": "tsc && mocha -r dotenv/config --recursive --timeout=100000 ./dist",
+    "postbuild": "yarn install --modules-folder ./dist/node_modules --production"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.75",
@@ -25,7 +25,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.9",
+    "@klutch-card/klutch-js": "^1.5.20",
     "aws-sdk": "^2.891.0",
     "base64url": "^3.0.1",
     "jsonwebtoken": "^8.5.1",

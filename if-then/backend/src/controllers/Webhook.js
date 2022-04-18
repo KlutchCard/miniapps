@@ -1,18 +1,18 @@
 const { BuildJWTToken } = require("./helper")
 const {
-  AlloyJS,
+  KlutchJS,
   RecipesService,
   GraphQLService,
   TransactionService,
   CardsService,
   Entity
-} = require("@klutchcard/alloy-js")
+} = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const Automation = require('../models/Automation')
 const { transactionEventType, klutchServerUrl, recipeId } = require('../../config')
 const Ajv = require("ajv")
 
-AlloyJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: klutchServerUrl })
 
 const ajv = new Ajv()
 let categories = null

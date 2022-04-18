@@ -1,7 +1,7 @@
 APP_NAME=if-then-server
 APP_DIR=/${APP_NAME}
 DOCKER_BASE_IMAGE=node:14.17
-PORT?=3001
+PORT?=3000
 COMMAND?=bash
 
 start:

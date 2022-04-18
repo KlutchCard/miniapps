@@ -8,7 +8,7 @@
     "start": "nodemon -r dotenv/config src/server.js"
   },
   "dependencies": {
-    "@klutchcard/alloy-js": "^1.4.41",
+    "@klutch-card/klutch-js": "^1.5.21",
     "ajv": "^8.6.2",
     "express": "^4.17.1",
     "http-status": "^1.5.0",

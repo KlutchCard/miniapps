@@ -1,7 +1,7 @@
 const { Router } = require("express")
 const axios = require('axios')
 const httpStatus = require('http-status')
-const AlloyJS = require("@klutchcard/alloy-js")
+const KlutchJS = require("@klutch-card/klutch-js")
 const { addAutomation, listAutomation } = require("./controllers/Automation")
 const { execAutomation } = require("./controllers/Webhook")
 const { listCategories } = require("./controllers/Categories")
@@ -9,7 +9,7 @@ const Automation = require('./models/Automation')
 const { klutchServerUrl, version } = require("../config")
 
 const router = Router()
-AlloyJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: klutchServerUrl })
 
 router.get("/category", listCategories)
 router.get("/automation", listAutomation)
@@ -44,7 +44,7 @@ router.get("/health", async (req, resp) => {
     services.database.success = false
     services.database.errorMessage = "database connection fail"
     responseStatus = httpStatus.SERVICE_UNAVAILABLE
-    console.log(services.klutchServer.errorMessage)
+    // console.log(services.klutchServer.errorMessage)
   }
 
   return resp.status(responseStatus).json({ services, version })

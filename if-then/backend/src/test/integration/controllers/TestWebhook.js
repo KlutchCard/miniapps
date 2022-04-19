@@ -55,25 +55,17 @@ describe('test webhook', () => {
             assert.equal(status, httpStatus.OK)
         })
 
-        // it('fail validation', async () => {
-        //     const req = { body: {}, headers: { authorization: token } }
-        //     const { status } = await addAutomation(req, mockResponse)
-        //     assert.equal(status, httpStatus.BAD_REQUEST)
-        // })
+        it('fail validation', async () => {
+            const { status } = await execAutomation({ body: {} }, mockResponse)
+            assert.equal(status, httpStatus.BAD_REQUEST)
+        })
 
-        // it('fail unauthorized', async () => {
-        //     const req = { body: bodyExample, headers: { authorization: "token" } }
-        //     const { status } = await addAutomation(req, mockResponse)
-        //     assert.equal(status, httpStatus.UNAUTHORIZED)
-        // })
-
-        // it('fail db connection', async () => {
-        //     mongoose.disconnect()
-        //     const req = { body: bodyExample, headers: { authorization: token } }
-        //     const { status } = await addAutomation(req, mockResponse)
-        //     assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
-        //     mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
-        // })
+        it('fail db connection', async () => {
+            mongoose.disconnect()
+            const { status } = await execAutomation({ body: payload }, mockResponse)
+            assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
+            mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
+        })
 
     })
 

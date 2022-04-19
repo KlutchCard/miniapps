@@ -151,7 +151,12 @@ const actions = {
     if (!categories) {
       categories = await TransactionService.getTransactionCategories()
     }
-    const { id } = categories.find(({ name }) => name.toUpperCase() == value.toUpperCase())
+    const category = categories.find(({ name }) => name.toUpperCase() == value.toUpperCase())
+    if (!category) {
+      console.log(`category "${value}" doesn't exist`)
+      return
+    }
+    const { id } = category
 
     console.log(`categorizing transaction "${trx.id}" to "${value}"`)
 

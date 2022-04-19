@@ -9,7 +9,7 @@ const {
 } = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const Automation = require('../models/Automation')
-const { transactionEventType, klutchServerUrl, recipeId } = require('../../config')
+const { transactionEventType, recipeId } = require('../../config')
 const Ajv = require("ajv")
 
 

@@ -7,7 +7,7 @@ const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@
 
 
 describe('test automation', () => {
-    const response = {
+    const mockResponse = {
         status: (status) => ({
             json: (body) => ({ status, body })
         })
@@ -36,28 +36,28 @@ describe('test automation', () => {
             token = `Bearer ${recipeInstallToken}`
         })
 
-        it('sucess', async () => {
+        it('success', async () => {
             const req = { body: bodyExample, headers: { authorization: token } }
-            const { status } = await addAutomation(req, response)
+            const { status } = await addAutomation(req, mockResponse)
             assert.equal(status, httpStatus.CREATED)
         })
 
         it('fail validation', async () => {
             const req = { body: {}, headers: { authorization: token } }
-            const { status } = await addAutomation(req, response)
+            const { status } = await addAutomation(req, mockResponse)
             assert.equal(status, httpStatus.BAD_REQUEST)
         })
 
         it('fail unauthorized', async () => {
             const req = { body: bodyExample, headers: { authorization: "token" } }
-            const { status } = await addAutomation(req, response)
+            const { status } = await addAutomation(req, mockResponse)
             assert.equal(status, httpStatus.UNAUTHORIZED)
         })
 
         it('fail db connection', async () => {
             mongoose.disconnect()
             const req = { body: bodyExample, headers: { authorization: token } }
-            const { status } = await addAutomation(req, response)
+            const { status } = await addAutomation(req, mockResponse)
             assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
             mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
         })
@@ -75,22 +75,22 @@ describe('test automation', () => {
             token = `Bearer ${recipeInstallToken}`
         })
 
-        it('sucess', async () => {
+        it('success', async () => {
             const req = { headers: { authorization: token } }
-            const { status } = await listAutomation(req, response)
+            const { status } = await listAutomation(req, mockResponse)
             assert.equal(status, httpStatus.OK)
         })
 
         it('fail unauthorized', async () => {
             const req = { headers: { authorization: "token" } }
-            const { status } = await listAutomation(req, response)
+            const { status } = await listAutomation(req, mockResponse)
             assert.equal(status, httpStatus.UNAUTHORIZED)
         })
 
         it('fail db connection', async () => {
             mongoose.disconnect()
             const req = { headers: { authorization: token } }
-            const { status } = await listAutomation(req, response)
+            const { status } = await listAutomation(req, mockResponse)
             assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
             mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
         })

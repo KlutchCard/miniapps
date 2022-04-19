@@ -3,13 +3,12 @@ const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@
 const { klutchServerUrl, recipeId } = require("../../../../config")
 const { validate } = require('../../../controllers/Webhook')
 
-KlutchJS.configure({
-    serverUrl: `${klutchServerUrl}/graphql`,
-    userPoolClientId: process.env.USER_POOL_CLIENT_ID,
-    userPoolServer: process.env.USER_POOL_SERVER
-})
 
-describe.only('test webhook', () => {
+describe('test webhook', () => {
+    before(async () => {
+        KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
+    })
+
 
     describe('validate payload', () => {
         let recipeInstallId = ''

@@ -6,7 +6,7 @@
   "repository": "https://github.com/AlloyCard/recipes/tree/main/if-then",
   "scripts": {
     "start": "nodemon -r dotenv/config src/server.js",
-    "test": "mocha --timeout 40000 ./src/test/**/Test*.js -r dotenv/config"
+    "test": "mocha --timeout 15000 ./src/test/**/Test*.js -r dotenv/config"
   },
   "dependencies": {
     "@klutch-card/klutch-js": "^1.5.21",

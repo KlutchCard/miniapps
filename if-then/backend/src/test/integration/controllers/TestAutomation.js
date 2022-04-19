@@ -7,6 +7,12 @@ const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@
 
 
 describe('test automation', () => {
+    const response = {
+        status: (status) => ({
+            json: (body) => ({ status, body })
+        })
+    }
+
     before(async () => {
         KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
         await AuthService.signIn(process.env.TEST_USER_EMAIL, process.env.TEST_USER_PASSWORD)
@@ -19,11 +25,6 @@ describe('test automation', () => {
         const bodyExample = {
             condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" },
             action: { key: "categorizeTransaction", title: "Categorize Transaction as ", value: "junkie" }
-        }
-        const response = {
-            status: (status) => ({
-                json: (body) => ({ status, body })
-            })
         }
         let token
 
@@ -57,6 +58,39 @@ describe('test automation', () => {
             mongoose.disconnect()
             const req = { body: bodyExample, headers: { authorization: token } }
             const { status } = await addAutomation(req, response)
+            assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
+            mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
+        })
+
+    })
+
+    describe('list automation resource', () => {
+        let token
+
+        before(async () => {
+            const recipeInstalls = await RecipesService.findInstalledRecipes()
+            const ifThenRecipeInstall = recipeInstalls.find(({ recipe }) => recipe.id == recipeId)
+
+            const recipeInstallToken = await RecipesService.getRecipeInstallToken(ifThenRecipeInstall.id)
+            token = `Bearer ${recipeInstallToken}`
+        })
+
+        it('sucess', async () => {
+            const req = { headers: { authorization: token } }
+            const { status } = await listAutomation(req, response)
+            assert.equal(status, httpStatus.OK)
+        })
+
+        it('fail unauthorized', async () => {
+            const req = { headers: { authorization: "token" } }
+            const { status } = await listAutomation(req, response)
+            assert.equal(status, httpStatus.UNAUTHORIZED)
+        })
+
+        it('fail db connection', async () => {
+            mongoose.disconnect()
+            const req = { headers: { authorization: token } }
+            const { status } = await listAutomation(req, response)
             assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
             mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
         })

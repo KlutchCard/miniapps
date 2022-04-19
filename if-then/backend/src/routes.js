@@ -9,7 +9,7 @@ const Automation = require('./models/Automation')
 const { klutchServerUrl, version } = require("../config")
 
 const router = Router()
-KlutchJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 
 router.get("/category", listCategories)
 router.get("/automation", listAutomation)
@@ -31,7 +31,7 @@ router.get("/health", async (req, resp) => {
     },
   }
 
-  await axios({ method: 'get', url: `${klutchServerUrl}/healthcheck`, })
+  await axios({ method: 'get', url: `${klutchServerUrl}/healthcheck` })
     .catch(function (error) {
       services.klutchServer.success = false
       services.klutchServer.errorMessage = "klutch server comunication fail"

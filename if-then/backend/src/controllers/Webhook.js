@@ -12,7 +12,7 @@ const Automation = require('../models/Automation')
 const { transactionEventType, klutchServerUrl, recipeId } = require('../../config')
 const Ajv = require("ajv")
 
-KlutchJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 
 const ajv = new Ajv()
 let categories = null

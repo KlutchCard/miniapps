@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose')
 var assert = require('assert')
-const { addAutomation, validate } = require('../../../controllers/Automation')
+const { addAutomation, listAutomation, validate } = require('../../../controllers/Automation')
 const { klutchServerUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
 const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@klutch-card/klutch-js")
 
@@ -16,31 +16,49 @@ describe('test automation', () => {
     after(() => { mongoose.disconnect() })
 
     describe('add automation resource', () => {
-        let req = {
-            body: {}, headers: { authorization: '', 'Content-Type': 'application/json' },
+        const bodyExample = {
+            condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" },
+            action: { key: "categorizeTransaction", title: "Categorize Transaction as ", value: "junkie" }
         }
-        let resp = {
+        const response = {
             status: (status) => ({
                 json: (body) => ({ status, body })
             })
         }
+        let token
 
         before(async () => {
-            req.body = {
-                condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" },
-                action: { key: "categorizeTransaction", title: "Categorize Transaction as ", value: "junkie" }
-            }
-
             const recipeInstalls = await RecipesService.findInstalledRecipes()
             const ifThenRecipeInstall = recipeInstalls.find(({ recipe }) => recipe.id == recipeId)
 
-            const token = await RecipesService.getRecipeInstallToken(ifThenRecipeInstall.id)
-            req.headers.authorization = `Bearer ${token}`
+            const recipeInstallToken = await RecipesService.getRecipeInstallToken(ifThenRecipeInstall.id)
+            token = `Bearer ${recipeInstallToken}`
         })
 
         it('sucess', async () => {
-            const { status } = await addAutomation(req, resp)
+            const req = { body: bodyExample, headers: { authorization: token } }
+            const { status } = await addAutomation(req, response)
             assert.equal(status, httpStatus.CREATED)
+        })
+
+        it('fail validation', async () => {
+            const req = { body: {}, headers: { authorization: token } }
+            const { status } = await addAutomation(req, response)
+            assert.equal(status, httpStatus.BAD_REQUEST)
+        })
+
+        it('fail unauthorized', async () => {
+            const req = { body: bodyExample, headers: { authorization: "token" } }
+            const { status } = await addAutomation(req, response)
+            assert.equal(status, httpStatus.UNAUTHORIZED)
+        })
+
+        it('fail db connection', async () => {
+            mongoose.disconnect()
+            const req = { body: bodyExample, headers: { authorization: token } }
+            const { status } = await addAutomation(req, response)
+            assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
+            mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
         })
 
     })

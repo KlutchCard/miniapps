@@ -169,4 +169,4 @@ const actions = {
   // - split transaction
 }
 
-module.exports = { execAutomation }
+module.exports = { execAutomation, validate }

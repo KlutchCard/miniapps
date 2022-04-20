@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const httpStatus = require('http-status');
 var assert = require('assert')
-const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@klutch-card/klutch-js")
+const { KlutchJS, AuthService, RecipesService, TransactionService, CardsService, CardLockState } = require("@klutch-card/klutch-js")
 const { klutchServerUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
-const { validate, execAutomation } = require('../../../controllers/Webhook')
+const { execAutomation, handleRule, validate } = require('../../../controllers/Webhook')
 
 
 describe('test webhook', () => {
@@ -65,6 +65,55 @@ describe('test webhook', () => {
             const { status } = await execAutomation({ body: payload }, mockResponse)
             assert.equal(status, httpStatus.SERVICE_UNAVAILABLE)
             mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
+        })
+
+    })
+
+    describe('handle rule function', () => {
+        let trx
+
+        before(async () => {
+            trx = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
+        })
+
+        describe('categorize transaction', () => {
+            it('success', async () => {
+                const rule = {
+                    condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" },
+                    action: { key: "categorizeTransaction", title: "Categorize Transaction as ", value: "food" }
+                }
+
+                try {
+                    const categories = await TransactionService.getTransactionCategories()
+                    const randomCategory = categories[Math.floor(Math.random() * categories.length)]
+                    rule.action.value = randomCategory.name
+
+                    await handleRule(rule, trx, payload.principal.entityID)
+                    const trxUpdated = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
+                    assert.equal(trxUpdated.category.name.toUpperCase(), rule.action.value.toUpperCase())
+                } catch (error) {
+                    assert.fail(error.message)
+                }
+            })
+        })
+
+        describe('freeze card', () => {
+            it('success', async () => {
+                const rule = {
+                    condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" },
+                    action: { key: "freezeCard", title: "Autolock Card", }
+                }
+
+                try {
+                    await handleRule(rule, trx, payload.principal.entityID)
+                    const trxUpdated = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
+                    assert.equal(trxUpdated.card.lockState, CardLockState.LOCKING)
+
+                    CardsService.unlock(trx.card)
+                } catch (error) {
+                    assert.fail(error.message)
+                }
+            })
         })
 
     })

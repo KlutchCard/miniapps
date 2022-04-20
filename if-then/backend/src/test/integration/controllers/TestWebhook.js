@@ -7,6 +7,7 @@ const { execAutomation, handleRule, verifyCondition, validate } = require('../..
 
 
 describe('test webhook', () => {
+    let trx
     const payload = {
         principal: {
             _alloyCardType: "com.alloycard.core.entities.recipe.RecipeInstall",
@@ -36,6 +37,7 @@ describe('test webhook', () => {
             (async () => {
                 const transactions = await TransactionService.getAllTransactions()
                 payload.event.transaction.entityID = transactions[0].id
+                trx = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
             })(),
         ])
         mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
@@ -70,12 +72,6 @@ describe('test webhook', () => {
     })
 
     describe('handle rule function', () => {
-        let trx
-
-        before(async () => {
-            trx = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
-        })
-
         describe('categorize transaction', () => {
             it('success', async () => {
                 const rule = {
@@ -119,45 +115,41 @@ describe('test webhook', () => {
     })
 
     describe('verify condition function', () => {
-        let trx
-
-        before(async () => {
-            trx = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
-        })
-
         describe('merchant amount', () => {
+            const rule = { condition: { key: "merchantAmount", title: "Amount Over Then $", value: null } }
             it('success', async () => {
-                const rule = { condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" } }
+                rule.condition.value = "0"
                 assert.ok(verifyCondition(rule.condition, trx))
             })
 
             it('fail', async () => {
-                const rule = { condition: { key: "merchantAmount", title: "Amount Over Then $", value: "1000" } }
+                rule.condition.value = "1000"
                 assert.equal(verifyCondition(rule.condition, trx), false)
             })
         })
 
         describe('merchant name', () => {
+            const rule = { condition: { key: "merchantName", title: "Merchant is ", value: null } }
             it('success', async () => {
-                const rule = { condition: { key: "merchantName", title: "Merchant is ", value: "Amazon" } }
+                rule.condition.value = "Amazon"
                 assert.ok(verifyCondition(rule.condition, trx))
             })
 
             it('fail', async () => {
-                const rule = { condition: { key: "merchantName", title: "Merchant is ", value: "McDonalds" } }
+                rule.condition.value = "McDonalds"
                 assert.equal(verifyCondition(rule.condition, trx), false)
-                console.log(trx)
             })
         })
 
         describe('merchant category', () => {
+            const rule = { condition: { key: "merchantCategory", title: "Category is ", value: null } }
             it('success', async () => {
-                const rule = { condition: { key: "merchantCategory", title: "Category is ", value: trx.category?.name } }
+                rule.condition.value = trx.category?.name
                 assert.ok(verifyCondition(rule.condition, trx))
             })
 
             it('fail', async () => {
-                const rule = { condition: { key: "merchantCategory", title: "Category is ", value: "UNCATEGORIZED" } }
+                rule.condition.value = "UNCATEGORIZED"
                 assert.equal(verifyCondition(rule.condition, trx), false)
             })
         })

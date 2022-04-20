@@ -10,7 +10,7 @@ const config = {
   transactionEventType: process.env.TRANSACTION_EVENT_TYPE || "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
   mongoDbName: process.env.MONGODB_NAME || throwMissingVariable('MONGODB_NAME'),
   port: process.env.PORT || 3000,
-  version: process.env.APP_VERSION || '1.2.0',
+  version: process.env.APP_VERSION || '1.2.1',
 }
 
 module.exports = { ...config }

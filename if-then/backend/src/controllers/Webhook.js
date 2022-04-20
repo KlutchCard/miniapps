@@ -15,7 +15,6 @@ const Ajv = require("ajv")
 
 const ajv = new Ajv()
 let categories = null
-let recipeInstallId
 
 const validate = ajv.compile({
   type: "object",
@@ -60,7 +59,7 @@ const execAutomation = async (req, resp) => {
 
   const { event, principal } = req.body
 
-  recipeInstallId = principal.entityID
+  const recipeInstallId = principal.entityID
 
   if (event._alloyCardType !== transactionEventType) {
     console.log(`event type "${event._alloyCardType} hasn't a handler`)
@@ -100,7 +99,7 @@ const execAutomation = async (req, resp) => {
       entity
     )
 
-    await Promise.all(Object.values(rules).map(rule => handleRule(rule, transaction)))
+    await Promise.all(Object.values(rules).map(rule => handleRule(rule, transaction, recipeInstallId)))
   } catch (err) {
     console.log({ err, recipeInstallId, transactionId: event.transaction.entityID })
     return resp.status(httpStatus.INTERNAL_SERVER_ERROR).json({ errorMessage: err.message })
@@ -110,7 +109,7 @@ const execAutomation = async (req, resp) => {
   return resp.status(httpStatus.OK).json()
 }
 
-const handleRule = async ({ condition, action }, trx) => {
+const handleRule = async ({ condition, action }, trx, recipeInstallId) => {
   const entity = new Entity({
     type: "com.alloycard.core.entities.transaction.Transaction",
     entityID: trx.id,
@@ -164,4 +163,4 @@ const actions = {
   // - split transaction
 }
 
-module.exports = { execAutomation, validate }
+module.exports = { execAutomation, handleRule, validate }

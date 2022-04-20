@@ -109,18 +109,18 @@ const execAutomation = async (req, resp) => {
   return resp.status(httpStatus.OK).json()
 }
 
-const handleRule = async ({ condition, action }, trx, recipeInstallId) => {
+const handleRule = async ({ condition, action }, transaction, recipeInstallId) => {
   const entity = new Entity({
     type: "com.alloycard.core.entities.transaction.Transaction",
-    entityID: trx.id,
+    entityID: transaction.id,
   })
 
-  if (!verifyCondition(condition, trx)) {
+  if (!verifyCondition(condition, transaction)) {
     return
   }
 
-  console.log(`applying rule "${condition.key}-${condition.value}", action "${action.key}" on transaction ${trx.id}`)
-  await applyAction(action, trx)
+  console.log(`applying rule "${condition.key}-${condition.value}", action "${action.key}" on transaction ${transaction.id}`)
+  await applyAction(action, transaction)
 
   RecipesService.addPanel(
     recipeInstallId,

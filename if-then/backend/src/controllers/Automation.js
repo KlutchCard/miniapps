@@ -49,29 +49,22 @@ const addAutomation = async (req, resp) => {
 
   const recipeInstallId = decodedToken["custom:principalId"]
 
-  let automation
-
   try {
-    automation = await Automation.findOne({ recipeInstallId })
-  } catch (err) {
-    console.log({ err, recipeInstallId })
-    return resp.status(httpStatus.SERVICE_UNAVAILABLE).json({ errorMessage: "Database connection error" })
-  }
+    const automation = await Automation.findOne({ recipeInstallId })
 
-  const { rules } = (automation || { _doc: { rules: {} } })._doc
+    const { rules } = (automation || { _doc: { rules: {} } })._doc
 
-  console.log(`recipeInstall "${recipeInstallId}" has "${Object.keys(rules).length}" rules`)
+    console.log(`recipeInstall "${recipeInstallId}" has "${Object.keys(rules).length}" rules`)
 
-  const { condition, action } = req.body
-  const id = `${condition.key}-${condition.value}`
-  rules[id] = { condition, action }
+    const { condition, action } = req.body
+    const id = `${condition.key}-${condition.value}`
+    rules[id] = { condition, action }
 
-  try {
     automation
       ? await Automation.updateOne({ recipeInstallId }, { recipeInstallId, rules })
       : await Automation.create({ recipeInstallId, rules })
   } catch (err) {
-    console.log({ err, recipeInstallId, rules })
+    console.log({ err, recipeInstallId })
     return resp.status(httpStatus.SERVICE_UNAVAILABLE).json({ errorMessage: "Database connection error" })
   }
 
@@ -107,4 +100,4 @@ const listAutomation = async (req, resp) => {
   return resp.status(httpStatus.OK).json(rules)
 }
 
-module.exports = { addAutomation, listAutomation }
+module.exports = { addAutomation, listAutomation, validate }

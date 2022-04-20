@@ -1,23 +1,20 @@
 const { BuildJWTToken } = require("./helper")
 const {
-  AlloyJS,
+  KlutchJS,
   RecipesService,
   GraphQLService,
   TransactionService,
   CardsService,
   Entity
-} = require("@klutchcard/alloy-js")
+} = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const Automation = require('../models/Automation')
-const { transactionEventType, klutchServerUrl, recipeId } = require('../../config')
+const { transactionEventType, recipeId } = require('../../config')
 const Ajv = require("ajv")
 
-AlloyJS.configure({ serverUrl: klutchServerUrl })
 
 const ajv = new Ajv()
 let categories = null
-let transaction
-let recipeInstallId
 
 const validate = ajv.compile({
   type: "object",
@@ -61,12 +58,8 @@ const execAutomation = async (req, resp) => {
   }
 
   const { event, principal } = req.body
-  if (!event || !principal) {
-    console.log(`payload is missing event or principal objects`)
-    return resp.status(httpStatus.BAD_REQUEST).json()
-  }
 
-  recipeInstallId = principal.entityID
+  const recipeInstallId = principal.entityID
 
   if (event._alloyCardType !== transactionEventType) {
     console.log(`event type "${event._alloyCardType} hasn't a handler`)
@@ -92,7 +85,7 @@ const execAutomation = async (req, resp) => {
     const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
     GraphQLService.setAuthToken(recipeInstallToken)
 
-    transaction = await TransactionService.getTransactionDetails(event.transaction.entityID)
+    const transaction = await TransactionService.getTransactionDetails(event.transaction.entityID)
 
     const entity = new Entity({
       type: "com.alloycard.core.entities.transaction.Transaction",
@@ -106,7 +99,7 @@ const execAutomation = async (req, resp) => {
       entity
     )
 
-    await Promise.all(Object.values(rules).map(handleRule))
+    await Promise.all(Object.values(rules).map(rule => handleRule(rule, transaction, recipeInstallId)))
   } catch (err) {
     console.log({ err, recipeInstallId, transactionId: event.transaction.entityID })
     return resp.status(httpStatus.INTERNAL_SERVER_ERROR).json({ errorMessage: err.message })
@@ -116,7 +109,7 @@ const execAutomation = async (req, resp) => {
   return resp.status(httpStatus.OK).json()
 }
 
-const handleRule = async ({ condition, action }) => {
+const handleRule = async ({ condition, action }, transaction, recipeInstallId) => {
   const entity = new Entity({
     type: "com.alloycard.core.entities.transaction.Transaction",
     entityID: transaction.id,
@@ -151,7 +144,12 @@ const actions = {
     if (!categories) {
       categories = await TransactionService.getTransactionCategories()
     }
-    const { id } = categories.find(({ name }) => name.toUpperCase() == value.toUpperCase())
+    const category = categories.find(({ name }) => name.toUpperCase() == value.toUpperCase())
+    if (!category) {
+      console.log(`category "${value}" doesn't exist`)
+      return
+    }
+    const { id } = category
 
     console.log(`categorizing transaction "${trx.id}" to "${value}"`)
 
@@ -165,4 +163,4 @@ const actions = {
   // - split transaction
 }
 
-module.exports = { execAutomation }
+module.exports = { execAutomation, handleRule, verifyCondition, validate }

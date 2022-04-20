@@ -1,7 +1,7 @@
 const { Router } = require("express")
 const axios = require('axios')
 const httpStatus = require('http-status')
-const AlloyJS = require("@klutchcard/alloy-js")
+const KlutchJS = require("@klutch-card/klutch-js")
 const { addAutomation, listAutomation } = require("./controllers/Automation")
 const { execAutomation } = require("./controllers/Webhook")
 const { listCategories } = require("./controllers/Categories")
@@ -9,7 +9,7 @@ const Automation = require('./models/Automation')
 const { klutchServerUrl, version } = require("../config")
 
 const router = Router()
-AlloyJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 
 router.get("/category", listCategories)
 router.get("/automation", listAutomation)
@@ -21,24 +21,23 @@ router.get("/health", async (req, resp) => {
 
   let responseStatus = httpStatus.OK
   let services = {
-    // klutchServer: {
-    //   success: true,
-    //   errorMessage: null,
-    // },
+    klutchServer: {
+      success: true,
+      errorMessage: null,
+    },
     database: {
       success: true,
       errorMessage: null,
     },
   }
 
-  // TODO fix klutchServerUrl
-  // await axios({ method: 'get', url: `${klutchServerUrl}/healthcheck`, })
-  //   .catch(function (error) {
-  //     services.klutchServer.success = false
-  //     services.klutchServer.errorMessage = "klutch server comunication fail"
-  //     responseStatus = httpStatus.SERVICE_UNAVAILABLE
-  //     console.log(services.klutchServer.errorMessage, error)
-  //   })
+  await axios({ method: 'get', url: `${klutchServerUrl}/healthcheck` })
+    .catch(function (error) {
+      services.klutchServer.success = false
+      services.klutchServer.errorMessage = "klutch server comunication fail"
+      responseStatus = httpStatus.SERVICE_UNAVAILABLE
+      console.log(services.klutchServer.errorMessage, error)
+    })
 
   if (Automation.collection.conn._readyState !== 1) {
     services.database.success = false

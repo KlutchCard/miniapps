@@ -15,7 +15,6 @@ const Ajv = require("ajv")
 
 const ajv = new Ajv()
 let categories = null
-let transaction
 let recipeInstallId
 
 const validate = ajv.compile({
@@ -60,10 +59,6 @@ const execAutomation = async (req, resp) => {
   }
 
   const { event, principal } = req.body
-  if (!event || !principal) {
-    console.log(`payload is missing event or principal objects`)
-    return resp.status(httpStatus.BAD_REQUEST).json()
-  }
 
   recipeInstallId = principal.entityID
 
@@ -91,7 +86,7 @@ const execAutomation = async (req, resp) => {
     const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
     GraphQLService.setAuthToken(recipeInstallToken)
 
-    transaction = await TransactionService.getTransactionDetails(event.transaction.entityID)
+    const transaction = await TransactionService.getTransactionDetails(event.transaction.entityID)
 
     const entity = new Entity({
       type: "com.alloycard.core.entities.transaction.Transaction",
@@ -105,7 +100,7 @@ const execAutomation = async (req, resp) => {
       entity
     )
 
-    await Promise.all(Object.values(rules).map(handleRule))
+    await Promise.all(Object.values(rules).map(rule => handleRule(rule, transaction)))
   } catch (err) {
     console.log({ err, recipeInstallId, transactionId: event.transaction.entityID })
     return resp.status(httpStatus.INTERNAL_SERVER_ERROR).json({ errorMessage: err.message })
@@ -115,18 +110,18 @@ const execAutomation = async (req, resp) => {
   return resp.status(httpStatus.OK).json()
 }
 
-const handleRule = async ({ condition, action }) => {
+const handleRule = async ({ condition, action }, trx) => {
   const entity = new Entity({
     type: "com.alloycard.core.entities.transaction.Transaction",
-    entityID: transaction.id,
+    entityID: trx.id,
   })
 
-  if (!verifyCondition(condition, transaction)) {
+  if (!verifyCondition(condition, trx)) {
     return
   }
 
-  console.log(`applying rule "${condition.key}-${condition.value}", action "${action.key}" on transaction ${transaction.id}`)
-  await applyAction(action, transaction)
+  console.log(`applying rule "${condition.key}-${condition.value}", action "${action.key}" on transaction ${trx.id}`)
+  await applyAction(action, trx)
 
   RecipesService.addPanel(
     recipeInstallId,

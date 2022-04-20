@@ -3,7 +3,7 @@ const httpStatus = require('http-status');
 var assert = require('assert')
 const { KlutchJS, AuthService, RecipesService, TransactionService, CardsService, CardLockState } = require("@klutch-card/klutch-js")
 const { klutchServerUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
-const { execAutomation, handleRule, validate } = require('../../../controllers/Webhook')
+const { execAutomation, handleRule, verifyCondition, validate } = require('../../../controllers/Webhook')
 
 
 describe('test webhook', () => {
@@ -92,7 +92,7 @@ describe('test webhook', () => {
                     const trxUpdated = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
                     assert.equal(trxUpdated.category.name.toUpperCase(), rule.action.value.toUpperCase())
                 } catch (error) {
-                    assert.fail(error.message)
+                    assert.fail(error)
                 }
             })
         })
@@ -111,8 +111,54 @@ describe('test webhook', () => {
 
                     CardsService.unlock(trx.card)
                 } catch (error) {
-                    assert.fail(error.message)
+                    assert.fail(error)
                 }
+            })
+        })
+
+    })
+
+    describe('verify condition function', () => {
+        let trx
+
+        before(async () => {
+            trx = await TransactionService.getTransactionDetails(payload.event.transaction.entityID)
+        })
+
+        describe('merchant amount', () => {
+            it('success', async () => {
+                const rule = { condition: { key: "merchantAmount", title: "Amount Over Then $", value: "0" } }
+                assert.ok(verifyCondition(rule.condition, trx))
+            })
+
+            it('fail', async () => {
+                const rule = { condition: { key: "merchantAmount", title: "Amount Over Then $", value: "1000" } }
+                assert.equal(verifyCondition(rule.condition, trx), false)
+            })
+        })
+
+        describe('merchant name', () => {
+            it('success', async () => {
+                const rule = { condition: { key: "merchantName", title: "Merchant is ", value: "Amazon" } }
+                assert.ok(verifyCondition(rule.condition, trx))
+            })
+
+            it('fail', async () => {
+                const rule = { condition: { key: "merchantName", title: "Merchant is ", value: "McDonalds" } }
+                assert.equal(verifyCondition(rule.condition, trx), false)
+                console.log(trx)
+            })
+        })
+
+        describe('merchant category', () => {
+            it('success', async () => {
+                const rule = { condition: { key: "merchantCategory", title: "Category is ", value: trx.category?.name } }
+                assert.ok(verifyCondition(rule.condition, trx))
+            })
+
+            it('fail', async () => {
+                const rule = { condition: { key: "merchantCategory", title: "Category is ", value: "UNCATEGORIZED" } }
+                assert.equal(verifyCondition(rule.condition, trx), false)
             })
         })
 

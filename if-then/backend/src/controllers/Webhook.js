@@ -163,4 +163,4 @@ const actions = {
   // - split transaction
 }
 
-module.exports = { execAutomation, handleRule, validate }
+module.exports = { execAutomation, handleRule, verifyCondition, validate }

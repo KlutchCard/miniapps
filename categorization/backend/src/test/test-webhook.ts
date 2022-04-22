@@ -25,7 +25,7 @@ const exampleTransactionEvent = {
       "_alloyCardType": "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
       "transaction": {
         "_alloyCardType": "com.alloycard.core.entities.transaction.Transaction",
-        "entityID": "e666cc94-42b5-4176-88e2-8011f6ab0a11"
+        "entityID": "18c13a4d-4a05-4704-bff5-6f348e05b81e"
       },
       "createdAt": 1629835288,
       "eventId": "01ad935f-a162-4be5-985e-870de23e1f97"

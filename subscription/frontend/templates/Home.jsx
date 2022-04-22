@@ -1,3 +1,5 @@
+const Line = ({style = {}}) => <Klutch.KView style={[st.line, style]} />
+
 Template = (data, context) => {
     
     return (
@@ -5,13 +7,13 @@ Template = (data, context) => {
             <Klutch.KView>
                 <Klutch.KText style={st.ymtd} >
                     ANNUAL{"\n"}
-                    <Klutch.KText format="currency-smallcents" fontWeight="bold">{data.sumYear}</Klutch.KText>
+                    <Klutch.KText format="currency-smallcents" fontWeight="bold">{data.sumYear || 0.00}</Klutch.KText>
                 </Klutch.KText>
                 <Klutch.KText style={st.ymtd}>
                     MONTHLY{"\n"}
-                    <Klutch.KText format="currency-smallcents" fontWeight="bold">{data.sumMonth}</Klutch.KText>
+                    <Klutch.KText format="currency-smallcents" fontWeight="bold">{data.sumMonth || 0.00}</Klutch.KText>
                 </Klutch.KText>
-        </Klutch.KView>
+            </Klutch.KView>
             <Klutch.KView style={st.secondColumn}>
                 {(data.subscriptions || []).length > 0 ? data.subscriptions.map(s => (
                     <Klutch.KView key={s.subscriptionId} style={st.subscriptionRow}>
@@ -22,13 +24,15 @@ Template = (data, context) => {
                         <Klutch.KText>{DateTime.fromISO(s.nextPayment).toFormat('LLL dd')}</Klutch.KText>
                     </Klutch.KView>
                 )) :
-                    <Klutch.KView style={{flex: 1, justifyContent: "center" }}>
-                        <Klutch.KText style={{textAlign:"center"}}>{`Add to see\nupcoming payments`}</Klutch.KText>                        
+                    <Klutch.KView style={{flex: 1}}>
+                        <Klutch.KText style={{fontSize: 12, marginTop: 10}}>{`Add to see upcoming payments`}</Klutch.KText>
+                        <Line />
+                        <Line style={{ marginTop: 50 }} />
                     </Klutch.KView>
                 }
             </Klutch.KView>
 
-    </Klutch.KPressable>
+        </Klutch.KPressable>
     )
 }
 
@@ -40,7 +44,7 @@ const st = {
     },
     ymtd: {
         fontSize: 15,
-        marginBottom: 8
+        marginBottom: 13
     }, 
     secondColumn: {
         flex: 1,
@@ -55,5 +59,11 @@ const st = {
         borderBottomColor: "#e3e3e3",
         paddingRight: 5,
         paddingVertical: 5
-    }
+    },
+    line: {
+        height:1,
+        backgroundColor: "#BCBCBC",
+        opacity: .2,
+        marginTop: 10,
+    },
 }

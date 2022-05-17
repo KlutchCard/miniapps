@@ -8,7 +8,7 @@
     "dev": "nodemon -r dotenv/config src/server.js"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.9",
+    "@klutch-card/klutch-js": "1.5.9",
     "ajv": "8.6.3",
     "axios": "0.23.0",
     "express": "4.17.1",

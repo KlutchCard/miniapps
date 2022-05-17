@@ -1,6 +1,6 @@
 "use strict";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import {AlloyEvent, Entity, GraphQLService, RecipesService, Transaction, TransactionService} from "@klutch-card/klutch-js"
+import { Entity, RecipesService, Transaction, TransactionService} from "@klutch-card/klutch-js"
 import Klutch from "./klutch.js";
 import db from "./db.js"
 import auth from "./auth.js"
@@ -15,6 +15,7 @@ type Subscription = {
     subscriptionId: string,
     recipeInstallId: string,
     name: string,
+    merchantId: string,
     frequency: "WEEKLY" | "MONTHLY" | "YEARLY",
     day: number,
     month: number,
@@ -56,8 +57,9 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         var {transactionDate,  ...td} = transactionData
         if (subscription) {            
             const subs = await fetchSubscriptions(recipeInstallId)
-            const s  = subs?.find(c => c.subscriptionId == subscription.subscriptionId)
-            db.insert(SubscriptionTransactionTable, {recipeInstallId: recipeInstallId, subscriptionId: s, subscription, transactionDate: "" + transactionDate,  ...td})            
+            const s  = subs?.find(c => c.subscriptionId == subscription.subscriptionId)!!
+            s.totalPaid += transactionData.amount
+            db.insert(SubscriptionTransactionTable, {recipeInstallId: recipeInstallId, subscriptionId: s.subscriptionId, subscription, transactionDate: "" + transactionDate,  ...td})            
             panel = await RecipesService.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transactionData, subscription: s}, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
         } else {
             panel = await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template", transactionData, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
@@ -100,11 +102,11 @@ export const newSubscription = async (event: APIGatewayProxyEvent): Promise<APIG
     var transaction  = subscription.transaction
     
     const subscriptionId = uuidv4()    
-    console.log("b4 insert")
     await db.insert(SubscriptionTable, {
         subscriptionId, 
         recipeInstallId, 
         name: subscription.name, 
+        merchantId: transaction.merchantId,
         amount: subscription.amount,
         frequency: subscription.frequency,
         day: subscription.day,
@@ -112,16 +114,11 @@ export const newSubscription = async (event: APIGatewayProxyEvent): Promise<APIG
         weekday: subscription.weekday} as Subscription)
         
     await db.insert(SubscriptionTransactionTable, {recipeInstallId: recipeInstallId, subscriptionId, transactionDate: transaction.transactionDate, ...transaction})
-    console.log("aft insert")
     const subscriptions = await fetchSubscriptions(recipeInstallId)    
-    console.log("aft subs")
     subscription = subscriptions?.find(c => c.subscriptionId == subscriptionId)
     await Klutch.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transaction, subscription: subscription},  new Entity({entityID: transaction.id, type: "com.alloycard.core.entities.transaction.Transaction"}), token)        
     await refreshHomePanel(recipeInstallId, token)    
-    console.log("aft panels")
    
-    console.log("FINISHED")
-
     return {
         statusCode: 200,
         body:  JSON.stringify(subscription)
@@ -152,7 +149,7 @@ const checkForSubscriptions = async(recipeInstallId: string, transaction: Transa
     return subscriptions.Items?.find(s  => {
         const sub = s as Subscription
         const date = DateTime.fromJSDate(transaction.transactionDate)
-        if (sub.name !== transaction.merchantName) {
+        if (sub.merchantId !== transaction.merchantId) {
             return false
         }
         switch (sub.frequency) {            

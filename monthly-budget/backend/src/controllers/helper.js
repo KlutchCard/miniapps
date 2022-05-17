@@ -1,4 +1,4 @@
-const { sign, verify } = require('jsonwebtoken');
+const { sign } = require('jsonwebtoken');
 const { recipeId, timeoutSec, privateKey, klutchPublicKey } = require('../config/config')
 
 const BuildJWTToken = () => {
@@ -14,6 +14,5 @@ const BuildJWTToken = () => {
   return sign(payload, privateKey, header)
 }
 
-const DecodeToken = (jwtToken) => verify(jwtToken, klutchPublicKey, { algorithms: ["RS256"] })
 
-module.exports = { BuildJWTToken, DecodeToken }
+module.exports = { BuildJWTToken }

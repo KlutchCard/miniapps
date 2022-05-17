@@ -47,16 +47,9 @@ const styles = {
   },
 }
 
-// Enum
-const State = {
-  initializing: 'initializing',
-  done: 'done',
-  loading: 'loading',
-}
-
 Template = (data, context) => {
   const { recipeId } = data
-  const { budgets, state } = context.state || { budgets: [], state: State.initializing }
+  const { budgets } = context.state || { budgets: data.budgets }
 
   const budgetContainer = ({ id, category, amount: budget, spent }) => (
     <Klutch.KView key={`budget-${id}`} style={styles.square}>
@@ -64,7 +57,6 @@ Template = (data, context) => {
       <Klutch.KPressable
         style={styles.categoryContainer}
         onPress={() => {
-          context.setState({ budgets, state: State.loading })
           context.redirect(`/miniapps/${recipeId}/templates/Home.template`)
         }}
       >
@@ -83,19 +75,22 @@ Template = (data, context) => {
     </Klutch.KView>
   )
 
-  const fetchData = async () => {
+  context.init(async () => {
     const budgets = await context.get('/budget')
-    context.setState({ budgets, state: State.done })
-  }
+    
+    context.changeData({recipeId, budgets})
+    context.setState({ budgets })
+
+  })
+
 
   const onPlusButtonPress = () => {
     context.setState({ budgets, state: State.loading })
     context.redirect(`/miniapps/${recipeId}/templates/New.template`)
   }
 
-  if (state === State.initializing) fetchData()
-
-  if (state !== State.done) {
+  
+  if (!budgets) {
     return (
       <Klutch.KView style={styles.loading}>
         <Klutch.KLoadingIndicator />

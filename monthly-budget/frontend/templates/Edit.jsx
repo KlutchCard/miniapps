@@ -95,7 +95,7 @@ Template = (data, context) => {
   if (Object.keys(context.state.budget).length === 0) context.setState({ budget: data })
   const { id, category, amount } = context.state.budget
   const { budgets, state, error, categories } = context.state
-  if (!categories) context.setState({ ...context.state, categories: ['SHOPPING', 'DINING OUT', 'TRANSPORT', 'FOOD', 'GIFTS', 'FUN', 'MEDICAL', 'BEAUTY',] })
+  if (!categories) context.setState({ categories: ['SHOPPING', 'DINING OUT', 'TRANSPORT', 'FOOD', 'GIFTS', 'FUN', 'MEDICAL', 'BEAUTY'], ...context.state, })
 
   const loadCategories = async () => {
     const cats = await context.get("/category")

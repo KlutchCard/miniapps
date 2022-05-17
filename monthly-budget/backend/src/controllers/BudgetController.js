@@ -126,7 +126,7 @@ const getBudgets = async (req, resp) => {
     const filters = {
       startDate,
       endDate,
-      transactionTypes: [TransactionType.PAYMENT],
+      transactionTypes: [TransactionType.CHARGE],
       transactionStatus: [TransactionStatus.PENDING, TransactionStatus.SETLLED]
     }
 

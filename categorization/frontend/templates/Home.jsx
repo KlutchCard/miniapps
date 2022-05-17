@@ -46,9 +46,7 @@ Template = (data, context) => {
                     colorScale={data.placeholder ? ["#2050C740"] : colors}                             
                     containerComponent={<Victory.VictoryContainer responsive={false} />}   
                     data={data.placeholder ? [{x: "NONE", y: 100}]  : chartData} 
-                    labels={() => `$${monthlySpent.toFixed(0)}\n \n${month}`}
-                    labelComponent={<Victory.VictoryLabel style={[{fontSize: 15, fontWeight: "bold"}, {fontSize: 3}, {fontSize: 12}]} dy={-15} />}
-                    labelPosition={() => "centroid"}
+                    labels={() => ``}
                     radius={107/2}                       
                     innerRadius={64/2}
                     origin={{x: 60, y: 55}}

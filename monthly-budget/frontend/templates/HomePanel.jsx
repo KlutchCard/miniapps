@@ -57,7 +57,7 @@ Template = (data, context) => {
       <Klutch.KPressable
         style={styles.categoryContainer}
         onPress={() => {
-          context.redirect(`/miniapps/${recipeId}/templates/Home.template`)
+          context.redirect(`/miniapps/${recipeId}/templates/Main.template`)
         }}
       >
         <Klutch.KText adjustsFontSizeToFit numberOfLines={1} style={styles.category} fontWeight="bold">
@@ -85,7 +85,6 @@ Template = (data, context) => {
 
 
   const onPlusButtonPress = () => {
-    context.setState({ budgets, state: State.loading })
     context.redirect(`/miniapps/${recipeId}/templates/New.template`)
   }
 

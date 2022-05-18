@@ -94,34 +94,27 @@ const budgetContainer = ({ id, category, amount: budget, spent }) => (
   </Klutch.KView>
 )
 
-// Enum
-const State = {
-  fromOtherView: 'switchingtoMain',
-
-  initializing: 'initializing',
-  done: 'done',
-  toHomeView: 'switchingToHome',
-  toNewView: 'switchingToNew',
-}
 
 Template = (data, context) => {
-  let { budgets, state, totalBudget } = context.state || { budgets: [], state: State.initializing }
-  const fetchData = async () => {
+  let { budgets,  totalBudget, loading } = context.state || { budgets: [], totalBudget: 0, loading: true}
+
+  context.init(async () => {
+    if (data && data.budgets)  {
+      context.setState({budgets: data.budgets, loading: false})
+    }
     const budgets = await context.get('/budget')
 
     if (budgets.length === 0) {
-      context.setState({ state: State.toNewView })
       context.loadTemplate("/templates/New.template")
+      return
     } else {
       const totalBudget = budgets.reduce((accum, item) => accum + item.amount, 0)
-      context.setState({ budgets, totalBudget, state: State.done, budget: {} })
+      context.setState({ budgets, totalBudget, loading: false})
     }
-  }
+  })
 
-  if (state === State.fromOtherView) context.setState({ state: State.initializing })
-  if (state === State.initializing) fetchData()
 
-  if (state !== State.done) {
+  if (loading) {
     return (
       <Klutch.KView style={styles.loading}>
         <Klutch.KLoadingIndicator />
@@ -138,8 +131,7 @@ Template = (data, context) => {
         <Klutch.KPressable
           style={styles.editButtonContainer}
           onPress={() => {
-            context.setState({ state: State.toHomeView })
-            context.loadTemplate("/templates/Home.template")
+            context.loadTemplate("/templates/Home.template", {budgets})
           }}
         >
           <Klutch.KText style={styles.editButtonText}>EDIT</Klutch.KText>

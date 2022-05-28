@@ -59,7 +59,7 @@ Template = (data, context) => {
                                 <Klutch.KView style={{width: 10, height: 10, borderRadius: 2, backgroundColor: colors[i], marginRight: 10}}/>
                                 <Klutch.KText>{c.x}</Klutch.KText>
                             </Klutch.KView>
-                            <Klutch.KText>a{c.y}</Klutch.KText>
+                            <Klutch.KText>{c.y}</Klutch.KText>
                         </Klutch.KView>
                     ))}
                 </Klutch.KView>        

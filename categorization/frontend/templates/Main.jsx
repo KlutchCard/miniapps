@@ -1,5 +1,6 @@
 Template = (data, context) => {
     const K = Klutch
+    
 
     context.init(async () => {
         context.setPanelConfig({backgroundColor: "#7BA29E"})

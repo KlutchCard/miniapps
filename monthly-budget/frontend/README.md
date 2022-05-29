@@ -1,1 +1,0 @@
-# Monthly budget miniapp templates

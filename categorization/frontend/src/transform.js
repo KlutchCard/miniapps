@@ -33,7 +33,7 @@ export default class Transform {
 
     transformTemplate = async (filename) => {    
         const resp = await babel.transformFileAsync(`${templatePath}/${filename}`, {
-            presets: ["@babel/preset-react"]
+            presets: ["@babel/preset-react", "minify"]
         })
         writeFile(`${distPath}/templates/${filename.replace(/\.\w*$/gm, ".template")}`, resp.code)
         console.log(`Updating Template: ${filename}`)

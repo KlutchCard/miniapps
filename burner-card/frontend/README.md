@@ -1,1 +1,0 @@
-# Burner-card miniapp templates

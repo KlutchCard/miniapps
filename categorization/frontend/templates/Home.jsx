@@ -8,6 +8,21 @@ const placeHolderData = {
     placeholder: true
 }
 
+
+function formatMoney(number, decPlaces, decSep, thouSep) {
+    decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+    decSep = typeof decSep === "undefined" ? "." : decSep;
+    thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+    var sign = number < 0 ? "-" : "";
+    var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+    var j = (j = i.length) > 3 ? j % 3 : 0;
+
+    return sign +
+        (j ? i.substr(0, j) + thouSep : "") +
+        i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+        (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "");
+}
+
 Template = (data, context) => {
 
 
@@ -15,7 +30,7 @@ Template = (data, context) => {
         data = placeHolderData       
     } 
 
-    const monthlySpent = data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0)
+    const monthlySpent = formatMoney(data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0), 0, ".", ",")
     const month = DateTime.now().toFormat('LLLL');
 
     var allCategories = data.amountPerCategory
@@ -51,6 +66,10 @@ Template = (data, context) => {
                     innerRadius={64/2}
                     origin={{x: 60, y: 55}}
                     padding={0} />
+                    <Klutch.KView style={{position: "absolute", bottom: -5, left: 0, width: 115}}>
+                        <Klutch.KText style={{textAlign: "center", fontSize: 14}} fontWeight="bold">${monthlySpent}</Klutch.KText>
+                        <Klutch.KText style={{textAlign: "center", fontSize: 12}}>{month}</Klutch.KText>
+                    </Klutch.KView>                
                 </Klutch.KView>                  
                 <Klutch.KView style={{flex: 1}}>
                     {(chartData).map((c, i) => (

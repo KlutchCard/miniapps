@@ -6,10 +6,10 @@ const { addAutomation, listAutomation } = require("./controllers/Automation")
 const { execAutomation } = require("./controllers/Webhook")
 const { listCategories } = require("./controllers/Categories")
 const Automation = require('./models/Automation')
-const { klutchServerUrl, version } = require("../config")
+const { healthUrl, graphqlUrl, version } = require("../config")
 
 const router = Router()
-KlutchJS.configure({ serverUrl: klutchServerUrl })
+KlutchJS.configure({ serverUrl: graphqlUrl })
 
 router.get("/category", listCategories)
 router.get("/automation", listAutomation)
@@ -30,10 +30,6 @@ router.get("/health", async (req, resp) => {
       errorMessage: null,
     },
   }
-
-  const healthUrl = (klutchServerUrl.endsWith("/graphql") ?
-    klutchServerUrl.substring(0, klutchServerUrl.length - 8) :
-    klutchServerUrl) + "/healthcheck"
 
   await axios({ method: 'get', url: healthUrl })
     .catch(function (error) {

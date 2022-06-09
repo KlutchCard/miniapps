@@ -13,4 +13,12 @@ const config = {
   version: process.env.APP_VERSION || '1.2.2',
 }
 
-module.exports = { ...config }
+const graphqlUrl = (config.klutchServerUrl.endsWith("/graphql") ?
+  config.klutchServerUrl :
+  config.klutchServerUrl + "/graphql")
+
+const healthUrl = (config.klutchServerUrl.endsWith("/graphql") ?
+  config.klutchServerUrl.substring(0, config.klutchServerUrl.length - 8) :
+  config.klutchServerUrl) + "/healthcheck"
+
+module.exports = { ...config, graphqlUrl, healthUrl }

@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const mongoose = require('mongoose')
 var assert = require('assert')
 const { addAutomation, listAutomation, validate } = require('../../../controllers/Automation')
-const { klutchServerUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
+const { graphqlUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
 const { KlutchJS, AuthService, RecipesService, TransactionService } = require("@klutch-card/klutch-js")
 
 
@@ -14,7 +14,7 @@ describe('test automation', () => {
     }
 
     before(async () => {
-        KlutchJS.configure({ serverUrl: klutchServerUrl, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
+        KlutchJS.configure({ serverUrl: graphqlUrl, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
         await AuthService.signIn(process.env.TEST_USER_EMAIL, process.env.TEST_USER_PASSWORD)
         mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, dbName: mongoDbName })
     })

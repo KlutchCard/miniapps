@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const httpStatus = require('http-status');
 var assert = require('assert')
 const { KlutchJS, AuthService, RecipesService, TransactionService, CardsService, CardLockState } = require("@klutch-card/klutch-js")
-const { klutchServerUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
+const { graphqlUrl, recipeId, mongoUrl, mongoDbName } = require("../../../../config")
 const { execAutomation, handleRule, verifyCondition, validate } = require('../../../controllers/Webhook')
 
 
@@ -26,7 +26,7 @@ describe('test webhook', () => {
     }
 
     before(async () => {
-        KlutchJS.configure({ serverUrl: klutchServerUrl, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
+        KlutchJS.configure({ serverUrl: graphqlUrl, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
         await AuthService.signIn(process.env.TEST_USER_EMAIL, process.env.TEST_USER_PASSWORD)
         await Promise.all([
             (async () => {

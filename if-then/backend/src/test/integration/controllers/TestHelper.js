@@ -4,7 +4,7 @@ const { KlutchJS, AuthService, RecipesService } = require("@klutch-card/klutch-j
 const { klutchServerUrl, recipeId } = require("../../../../config")
 
 KlutchJS.configure({
-    serverUrl: `${klutchServerUrl}/graphql`,
+    serverUrl: klutchServerUrl,
     userPoolClientId: process.env.USER_POOL_CLIENT_ID,
     userPoolServer: process.env.USER_POOL_SERVER
 })

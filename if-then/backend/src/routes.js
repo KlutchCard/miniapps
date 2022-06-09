@@ -9,7 +9,7 @@ const Automation = require('./models/Automation')
 const { klutchServerUrl, version } = require("../config")
 
 const router = Router()
-KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
+KlutchJS.configure({ serverUrl: klutchServerUrl })
 
 router.get("/category", listCategories)
 router.get("/automation", listAutomation)
@@ -31,12 +31,16 @@ router.get("/health", async (req, resp) => {
     },
   }
 
-  await axios({ method: 'get', url: `${klutchServerUrl}/healthcheck` })
+  const healthUrl = (klutchServerUrl.endsWith("/graphql") ?
+    klutchServerUrl.substring(0, klutchServerUrl.length - 8) :
+    klutchServerUrl) + "/healthcheck"
+
+  await axios({ method: 'get', url: healthUrl })
     .catch(function (error) {
       services.klutchServer.success = false
       services.klutchServer.errorMessage = "klutch server comunication fail"
       responseStatus = httpStatus.SERVICE_UNAVAILABLE
-      console.log(services.klutchServer.errorMessage, error)
+      console.log(healthUrl, services.klutchServer.errorMessage, error)
     })
 
   if (Automation.collection.conn._readyState !== 1) {
@@ -46,7 +50,7 @@ router.get("/health", async (req, resp) => {
     console.log(services.klutchServer.errorMessage)
   }
 
-  return resp.status(responseStatus).json({ services, version })
+  return resp.status(responseStatus).json({ name: "if-then", services, version })
 })
 
 module.exports = { router }

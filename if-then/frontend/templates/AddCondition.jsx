@@ -62,7 +62,7 @@ Template = (data, context) => {
   const { state } = context.state || { state: State.fromOtherView }
 
   const fetchCategories = async () => {
-    const cats = await context.get("category")
+    const cats = await context.get("/category")
     let cats2 = []
     cats.map(({ name }) => cats2.push(name))
     context.setState({ categories: cats2, state: State.ready })

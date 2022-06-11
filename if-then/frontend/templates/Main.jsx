@@ -21,7 +21,7 @@ Template = (data = {}, context) => {
   const { state } = context.state || { state: State.fromOtherView }
 
   const fetchRules = async () => {
-    const resp = await context.get("automation")
+    const resp = await context.get("/automation")
     context.setState({ rules: resp, state: State.ready })
   }
 

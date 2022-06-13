@@ -94,7 +94,7 @@ const getBudgets = async (req, resp) => {
   try {
     recipeInstallId = getRecipeInstallId(req.headers.authorization)
   } catch (err) {
-    console.log({ err })
+    console.log({ err, token: req.headers.authorization })
     return resp.status(httpStatus.UNAUTHORIZED).json({ errorMessage: "Invalid token" })
   }
 

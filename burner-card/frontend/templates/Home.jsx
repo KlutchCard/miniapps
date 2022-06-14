@@ -18,7 +18,7 @@ Template = (data, context) => {
             const resp = await context.post("/card")
             context.redirect(`/cards/${resp.data.id}`)
           } catch (err) {
-            context.setState({ errorMessage: "Cannot create more than 3 cards per day\nYou can only have 10 virtual cards" })
+            context.setState({ errorMessage: "Could not create a card. Make sure you have appropriate permissions and you are approved" })
           }
           context.setState({ buttonDisabled: false })
         }}

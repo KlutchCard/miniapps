@@ -166,7 +166,7 @@ export const oauthRedirect = async (event: APIGatewayProxyEvent): Promise<APIGat
     var rows = []
     for (let t of transactions) {
         try {
-            rows.push([DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
+            rows.push([t.id, DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
         } catch (e) {
             console.error("ERROR", e)
         }

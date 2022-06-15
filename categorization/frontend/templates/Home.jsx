@@ -24,7 +24,15 @@ function formatMoney(number, decPlaces, decSep, thouSep) {
 }
 
 Template = (data, context) => {
+    
 
+    context.init(async () => {
+        var resp = await context.get("/categories") 
+         if (resp && resp.amountPerCategory) {
+            context.changeData(resp)
+        }        
+    })
+    
 
     if (!data || !data.amountPerCategory || data.amountPerCategory.length <= 1) {
         data = placeHolderData       
@@ -33,7 +41,7 @@ Template = (data, context) => {
     const monthlySpent = formatMoney(data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0), 0, ".", ",")
     const month = DateTime.now().toFormat('LLLL');
 
-    var allCategories = data.amountPerCategory
+    var allCategories = [...data.amountPerCategory]
         .sort((x, y) => y.amount - x.amount)    
 
 
@@ -54,7 +62,7 @@ Template = (data, context) => {
 
 
     return (                
-        <Klutch.KPressable style={{flex: 1}} onPress={() => context.loadTemplate("/templates/Main.template")} >
+        <Klutch.KPressable style={{flex: 1}} onPress={() => context.loadTemplate("/templates/Main.template", data)} >
             <Klutch.KView style={{flex: 1,  flexDirection: "row"}}>            
                 <Klutch.KView style={{flexBasis: 130, flex: 0}} pointerEvents="none">
                     <Victory.VictoryPie  

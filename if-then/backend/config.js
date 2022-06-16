@@ -9,8 +9,16 @@ const config = {
   timeoutSec: parseInt(process.env.TOKEN_TIMEOUT_SEC) || 60,
   transactionEventType: process.env.TRANSACTION_EVENT_TYPE || "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
   mongoDbName: process.env.MONGODB_NAME || throwMissingVariable('MONGODB_NAME'),
-  port: process.env.PORT || 3000,
-  version: process.env.APP_VERSION || '1.2.1',
+  port: process.env.PORT || 3001,
+  version: process.env.APP_VERSION || '1.2.3',
 }
 
-module.exports = { ...config }
+const graphqlUrl = (config.klutchServerUrl.endsWith("/graphql") ?
+  config.klutchServerUrl :
+  config.klutchServerUrl + "/graphql")
+
+const healthUrl = (config.klutchServerUrl.endsWith("/graphql") ?
+  config.klutchServerUrl.substring(0, config.klutchServerUrl.length - 8) :
+  config.klutchServerUrl) + "/healthcheck"
+
+module.exports = { ...config, graphqlUrl, healthUrl }

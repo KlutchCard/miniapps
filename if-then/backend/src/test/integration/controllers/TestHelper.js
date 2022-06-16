@@ -1,10 +1,10 @@
 const { BuildJWTToken, DecodeToken } = require('../../../controllers/helper')
 var assert = require('assert')
 const { KlutchJS, AuthService, RecipesService } = require("@klutch-card/klutch-js")
-const { klutchServerUrl, recipeId } = require("../../../../config")
+const { graphqlUrl, recipeId } = require("../../../../config")
 
 KlutchJS.configure({
-    serverUrl: `${klutchServerUrl}/graphql`,
+    serverUrl: graphqlUrl,
     userPoolClientId: process.env.USER_POOL_CLIENT_ID,
     userPoolServer: process.env.USER_POOL_SERVER
 })

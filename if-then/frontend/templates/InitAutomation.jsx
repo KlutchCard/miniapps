@@ -22,7 +22,7 @@ Template = (data = {}, context) => {
   const onDoneButtonPress = async () => {
     context.setState({ ...context.state, state: State.loading })
     if (data.action && data.condition) {
-      await context.post("automation", data)
+      await context.post("/automation", data)
       context.setState({ ...context.state, state: State.toMainView })
       context.loadTemplate("/templates/Main.template", data)
       return

@@ -30,10 +30,10 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.1.tgz#076d78ce99822258cf813ecc1e7fa460fa74d052"
   integrity sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==
 
-"@klutch-card/klutch-js@^1.6.2":
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-js/-/klutch-js-1.6.2.tgz#805a474360faaac5afc6a5ea09a8b41331528462"
-  integrity sha512-F9QW6QUACYEkUNqt35p8K8oWHCBKnDo5jUstU7edL4RmdTOa4UC3s/BSNLIg7r6yIK44P8isWbrO0koEnADcpg==
+"@klutch-card/klutch-js@^1.6.7":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@klutch-card/klutch-js/-/klutch-js-1.6.8.tgz#4a0ae5e5527b1418cf1ea09ae1475758eb21ec2e"
+  integrity sha512-YdjXTnVFlBOPFAD0do8E1NYBb0qmYPo3D44aFLcRD1atRdnUZ6TjSU75C1FKHDH/x/2RjpI+DNw5ebKDSjw1AQ==
   dependencies:
     "@apollo/client" "^3.5.8"
     axios "^0.21.1"

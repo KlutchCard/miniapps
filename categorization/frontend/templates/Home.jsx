@@ -43,7 +43,7 @@ Template = (data, context) => {
 
     var allCategories = [...data.amountPerCategory]
         .sort((x, y) => y.amount - x.amount)    
-
+        
 
     const others = allCategories.splice(4).reduce((acc, curr) => acc + curr.amount, 0)
 

@@ -6,6 +6,7 @@ import db from "./db.js"
 import auth from "./auth.js"
 import { v4 as uuidv4 } from 'uuid';
 import  { DateTime } from "luxon"
+import { DeclineBasedOnFilterRuleSpec, TransactionRuleFilter } from "@klutch-card/klutch-js/lib/entities/TransactionRule.js";
 
 
 const SubscriptionTable = process.env.SubscriptionTable as string 
@@ -16,6 +17,7 @@ type Subscription = {
     recipeInstallId: string,
     name: string,
     merchantId: string,
+    cardAcceptorId: string,
     frequency: "WEEKLY" | "MONTHLY" | "YEARLY",
     day: number,
     month: number,
@@ -107,6 +109,7 @@ export const newSubscription = async (event: APIGatewayProxyEvent): Promise<APIG
         recipeInstallId, 
         name: subscription.name, 
         merchantId: transaction.merchantId,
+        cardAcceptorId: transaction.cardAcceptorId,
         amount: subscription.amount,
         frequency: subscription.frequency,
         day: subscription.day,
@@ -144,12 +147,46 @@ export const getSubscriptions = async (event: APIGatewayProxyEvent): Promise<API
     }
 }
 
+
+export const rejectSubscription = async(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log("Event", event)
+
+    var token = event.headers["authorization"] || ""
+    if (token.startsWith("Bearer ")) {
+        token = token.substr(7)
+    }
+
+    const jwt = auth.auth(token)
+    const recipeInstallId = jwt["custom:principalId"]
+
+    const subscriptionId = "??"
+
+    const subscription: Subscription = (await db.query(SubscriptionTable, "recipeInstallId = :recipeInstallId and subscriptionId = :subcriptionId", {":recipeInstallId": recipeInstallId, ":subscriptionId": subscriptionId})).Items??[0]  
+    
+    const transaction: Transaction = (await db.query(SubscriptionTransactionTable, "recipeInstallId = :recipeInstallId and subscriptionId = :subcriptionId", {":recipeInstallId": recipeInstallId, ":subscriptionId": subscriptionId})).Items??[0] 
+
+    
+    const filter = TransactionRuleFilter({field: CARD_ACCEPTOR_ID, operator: EQUALS, value: transaction.cardAcceptorId})
+    const spec = new DeclineBasedOnFilterRuleSpec({filter})
+    const rule = TransactionService.createTransactionRule(
+        `SubscriptionManager-${subscriptionId}`, 
+        `Reject Subscription ${subscription.name}`,
+        [transaction.card.id], spec)
+
+    //save transaction rule!
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(subscriptions)
+    }
+}
+
 const checkForSubscriptions = async(recipeInstallId: string, transaction: Transaction): Promise<Subscription | undefined> => {
     const subscriptions = await db.query(SubscriptionTable, "recipeInstallId = :recipeInstallId", {":recipeInstallId": recipeInstallId}) 
     return subscriptions.Items?.find(s  => {
         const sub = s as Subscription
         const date = DateTime.fromJSDate(transaction.transactionDate)
-        if (sub.merchantId !== transaction.merchantId) {
+        if (sub.cardAcceptorId !== transaction.cardAcceptorId) {
             return false
         }
         switch (sub.frequency) {            
@@ -222,6 +259,8 @@ const fetchSubscriptions = async(recipeInstallId: string) => {
     return sorted
 }
 
+
+
 export const refreshHomePanel = async(recipeInstallId: string, token: string) => {
     
     const sorted = await fetchSubscriptions(recipeInstallId)
@@ -233,3 +272,6 @@ export const refreshHomePanel = async(recipeInstallId: string, token: string) =>
 
     await Klutch.addPanel(recipeInstallId, "/templates/Home.template", {sumMonth, sumYear, subscriptions: sorted?.slice(0, 2)!!}, null, token)
 }
+
+
+

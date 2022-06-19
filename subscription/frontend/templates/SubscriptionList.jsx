@@ -17,30 +17,31 @@ Template =  (data, context) => {
     if (!subscriptionList) {
         
         return (<Klutch.KLoadingIndicator />)
-    }
-
+    }    
 
     return (
         <Klutch.KView style={{ flex: 1, paddingBottom: 20 }}>
             <Klutch.KView>
                 <Klutch.KText format="currency" fontWeight="semibold" style={s.totalAmount}>${total}</Klutch.KText>
-                <Klutch.KText style={s.totalSpentLabel} fontWeight="bold">Total Spent</Klutch.KText>
+                <Klutch.KText style={s.totalSpentLabel} fontWeight="bold">Totsl Spent</Klutch.KText>
             </Klutch.KView>
             <Klutch.KScrollView style={s.transactionList}>
                 {subscriptionList.map(t => (
-                    <Klutch.KView key={t.subscriptionId} style={s.subscription} key={s.subscriptionId}>
-                        <Klutch.KView style={s.line}>
-                            <Klutch.KText>{t.name}</Klutch.KText>
-                            <Klutch.KText>{t.amount}</Klutch.KText>
-                        </Klutch.KView>
-                        <Klutch.KView style={s.line}>
-                            <Klutch.KText style={{color: "#6B6B6B"}}>Next Payment: {DateTime.fromISO(t.nextPayment).toFormat('LLL dd')}</Klutch.KText>
-                            <Klutch.KText style={s.frequency}>{t.frequency}</Klutch.KText>                            
-                        </Klutch.KView>
-                        <Klutch.KView style={s.line}>
-                            <Klutch.KText style={{color: "#6B6B6B"}}>Total this year: {t.totalPaid}</Klutch.KText>                            
-                        </Klutch.KView>
-                    </Klutch.KView>                    
+                    <Klutch.KPressable key={t.subscriptionId} onPress={() => context.loadTemplate("/templates/SubscriptionDetail.template", t)}>
+                        <Klutch.KView style={s.subscription}>
+                            <Klutch.KView style={s.line}>
+                                <Klutch.KText>{t.name}</Klutch.KText>
+                                <Klutch.KText>{t.amount}</Klutch.KText>
+                            </Klutch.KView>
+                            <Klutch.KView style={s.line}>
+                                <Klutch.KText style={{color: "#6B6B6B"}}>Next Payment: {DateTime.fromISO(t.nextPayment).toFormat('LLL dd')}</Klutch.KText>
+                                <Klutch.KText style={s.frequency}>{t.frequency}</Klutch.KText>                            
+                            </Klutch.KView>
+                            <Klutch.KView style={s.line}>
+                                <Klutch.KText style={{color: "#6B6B6B"}}>Total this year: {t.totalPaid}</Klutch.KText>                            
+                            </Klutch.KView>
+                        </Klutch.KView>    
+                    </Klutch.KPressable>                
                 ))}
             </Klutch.KScrollView>
             <Klutch.KText style={{textAlign: "center", marginBottom: 10}}>Add more transactions using the transaction panel</Klutch.KText>

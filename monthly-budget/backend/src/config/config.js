@@ -3,7 +3,7 @@ const throwMissingVariable = (name) => { throw new Error(`missing required env v
 
 module.exports = {
   klutchServerUrl: process.env.KLUTCH_SERVER_URL || throwMissingVariable('KLUTCH_SERVER_URL'),
-  klutchPublicKey: process.env.KLUTCH_PUBLIC_KEY || throwMissingVariable('KLUTCH_PUBLIC_KEY'),
+  klutchPublicKey: process.env.KLUTCH_PUBLIC_KEY?.replace(/\\n/g, "\n") || throwMissingVariable('KLUTCH_PUBLIC_KEY'),
   port: process.env.PORT || 3002,
   database: {
     dialect: process.env.DATABASE_DIALECT || 'mysql',
@@ -13,6 +13,6 @@ module.exports = {
     password: process.env.DATABASE_PASSWORD || throwMissingVariable('DATABASE_PASSWORD'),
   },
   recipeId: process.env.RECIPE_ID || throwMissingVariable('RECIPE_ID'),
-  privateKey: process.env.RECIPE_PRIVATE_KEY || throwMissingVariable('RECIPE_PRIVATE_KEY'),
-  version: process.env.APP_VERSION || '1.2.2',
+  privateKey: process.env.RECIPE_PRIVATE_KEY?.replace(/\\n/g, "\n") || throwMissingVariable('RECIPE_PRIVATE_KEY'),
+  version: process.env.APP_VERSION || '1.2.3',
 }

@@ -159,7 +159,7 @@ export const rejectSubscription = async(event: APIGatewayProxyEvent): Promise<AP
     const jwt = auth.auth(token)
     const recipeInstallId = jwt["custom:principalId"]
 
-    const subscriptionId = "??"
+    const  subscriptionId  = event.pathParameters?["subscriptionId"]
 
     const subscription: Subscription = (await db.query(SubscriptionTable, "recipeInstallId = :recipeInstallId and subscriptionId = :subcriptionId", {":recipeInstallId": recipeInstallId, ":subscriptionId": subscriptionId})).Items??[0]  
     

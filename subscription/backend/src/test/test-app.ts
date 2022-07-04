@@ -1,5 +1,5 @@
 import chai, { expect } from "chai";
-import {getSubscriptions, klutchWebhook, newSubscription} from "../app.js"
+import {getSubscriptions, klutchWebhook, newSubscription, rejectSubscription} from "../app.js"
 
 import Klutch from '../klutch.js'
 
@@ -104,7 +104,19 @@ describe('Tests SubscriptionManager', function () {
         } as any)  
         console.log(resp)
         expect(resp.statusCode).to.be.equal(200)  
-    })     
+    })  
+    
+    it ("Reject next payment", async() => {
+      const jwt = await Klutch.auth(recipeInstallId)
+      
+      var resp = await rejectSubscription({
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }        
+      } as any)  
+      console.log(resp)
+      expect(resp.statusCode).to.be.equal(200)  
+    })
 });
 
 

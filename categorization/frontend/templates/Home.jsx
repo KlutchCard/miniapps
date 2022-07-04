@@ -38,7 +38,9 @@ Template = (data, context) => {
         data = placeHolderData       
     } 
 
-    const monthlySpent = formatMoney(data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0), 0, ".", ",")
+    var totalMonthly = (data.amountPerCategory && data.amountPerCategory.length > 0) ? data.amountPerCategory.reduce((prev, cur) => prev + cur.amount, 0) : 0
+
+    const monthlySpent = formatMoney(totalMonthly, 0, ".", ",")
     const month = DateTime.now().toFormat('LLLL');
 
     var allCategories = [...data.amountPerCategory]

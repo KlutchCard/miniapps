@@ -1,0 +1,16 @@
+{
+    "version": 1,
+    "visibility": "PUBLIC",
+    "iconFile": "images/icon.png",
+    "screenshotsPath": "images/screenshots",
+    "templatesPath": "templates",
+    "buildPath": "dist",
+    "publicKeyFile": "SubscriptionMonitor.pem",
+    "minimumKlutchVersion": "1.0.0",
+    "autoCreateHomePanel": true,    
+    "projectName": "SubscriptionMonitor",
+    "name": "Subscription Monitor",
+    "description": "Track and control subscriptions.",
+    "longDescription": "Experience complete control and the freedom over your subscriptions all in one place! See how much you are spending monthly and annually, track upcoming payment dates and renewal dates so you never pay for subscriptions you no longer want.",
+    "serverUrl": ""
+}

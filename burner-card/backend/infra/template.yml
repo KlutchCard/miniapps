@@ -43,7 +43,7 @@ Resources:
           Image: !GetAtt MiniAppECR.RepositoryUri
           PortMappings:
             - ContainerPort: !Ref Port
-              HostPort: !Ref Port
+              HostPort: 0
               Protocol: tcp
           MemoryReservation: 512
           Environment:

@@ -5,6 +5,7 @@ import Klutch from '../klutch.js'
 
 
 const recipeInstallId = process.env.testRecipeInstallId || ""
+const transactionId = process.env.testTransactionId
 
 const exampleRecipeInstallCreatedEvent = {
   "principal": {
@@ -24,7 +25,7 @@ const exampleTransactionEvent = {
       "_alloyCardType": "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
       "transaction": {
         "_alloyCardType": "com.alloycard.core.entities.transaction.Transaction",
-        "entityID": "fbb9c255-ca01-4ff1-8be1-26aba77c5a83"
+        "entityID": transactionId
       },
       "createdAt": 1619196970,
       "eventId": "2e437043-63ea-4903-8c38-7f713f4e9c20"
@@ -65,32 +66,34 @@ describe('Tests SubscriptionManager', function () {
         expect(resp.statusCode).to.be.equal(200)
     })
 
-     it("Transaction received on Webhook", async () => {        
+    it("Transaction received on Webhook", async () => {        
         const transaction = JSON.stringify(exampleTransactionEvent)
          var resp = await klutchWebhook({
             body: transaction
         } as any)
-        chai.expect(resp.statusCode).to.be.equal(200)                
+        expect(resp.statusCode).to.be.equal(200)                
     })     
 
     it("New Subscription received", async () => {      
-      const subscription = JSON.stringify({
+      const subscription = JSON.stringify({transaction: {
         name: "Netflix",
         frequency: "MONTHLY",
         day: 5,
+        transactionDate: exampleTransaction.transactionDate,
+        id: exampleTransaction.id,
         transactionData: exampleTransaction
-      })
+      }})
       
       const jwt = await Klutch.auth(recipeInstallId)
       
       
       var resp = await newSubscription({
         headers: {
-          Authorization: `Bearer ${jwt}`
+          authorization: `Bearer ${jwt}`
         },
         body: subscription
       } as any)
-      chai.expect(resp.statusCode).to.be.equal(200)
+      expect(resp.statusCode).to.be.equal(200)
     })
 
     it("Get Subscription", async () => {      
@@ -99,10 +102,9 @@ describe('Tests SubscriptionManager', function () {
       
         var resp = await getSubscriptions({
           headers: {
-            Authorization: `Bearer ${jwt}`
+            authorization: `Bearer ${jwt}`
           }        
         } as any)  
-        console.log(resp)
         expect(resp.statusCode).to.be.equal(200)  
     })     
 });

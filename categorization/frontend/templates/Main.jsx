@@ -1,16 +1,19 @@
 Template = (data, context) => {
     const K = Klutch
+    
+    
 
     context.init(async () => {
-        context.setPanelConfig({backgroundColor: "#7BA29E"})
+        context.setPanelConfig({backgroundColor: "#7BA29E"})    
+
+        if (data && data.amountPerCategory && data.amountPerCategory.length > 0) {                 
+            context.setState({dataset: data})
+        } 
+    
         var resp = await context.get("/categories")
         context.setState({dataset: resp})   
     })
 
-    if (data && data.amountPerCategory && data.amountPerCategory.length > 0) {        
-        context.setState({dataset: data})
-    } else {
-    }
 
 
     var {dataset} = context.state || {}
@@ -25,7 +28,7 @@ Template = (data, context) => {
     const month = DateTime.now().toFormat('LLL').toUpperCase();
 
 
-    var allCategories = dataset
+    var allCategories = dataset.amountPerCategory
         .filter(x => x.amount > 0)
         .sort((x, y) => y.amount - x.amount)    
 

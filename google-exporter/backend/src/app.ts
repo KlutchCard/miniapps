@@ -40,12 +40,6 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
         alloyEvent.event._alloyCardType == "com.alloycard.core.entities.transaction.TransactionUpdatedEvent") {
         const recipeInstallId = alloyEvent.principal.entityID        
         const t: Transaction = await alloy.getTransactionDetails(alloyKey, recipeId, recipeInstallId, alloyEvent.event.transaction.entityID)
-        if (t.transactionStatus != "SETTLED") {
-            return {
-                statusCode: 200,
-                body: "{}"
-            }            
-        }
 
         const googleCredentials = await dynamo.findById(tableName, recipeInstallId)
         const params = new URLSearchParams()
@@ -61,13 +55,32 @@ export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }); 
-        
-            const row = [DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]
-            const sheetRow = await sheets.insertLine(resp.data, googleCredentials.Item.sheetId, row)
-            const panel = await alloy.addTransactionPanel(alloyKey, recipeId, recipeInstallId, "/templates/Transaction.template", {transaction: t, ...sheetRow}, t.id)        
+
+            const row = {Id: t.id,
+                Date: DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}),
+                Card:  t.card?.name || "",
+                Merchant: t.merchantName,
+                Amount: t.amount,
+                Category: t.category?.name || "",
+                Type: t.transactionType,
+                Status: t.transactionStatus,
+                Street: t.streetAddress,
+                City: t.city,
+                State: t.state,
+                "Zip Code": t.zipCode
+            }
+            const currentRows = await sheets.findLines(resp.data, googleCredentials.Item.sheetId)
+            //check insert or update
+            const line = currentRows.find((r: any) => r.Id == t.id) 
+            if (line) {
+                await sheets.updateLine(resp.data, googleCredentials.Item.sheetId, line, row)
+            } else {
+                const sheetRow = await sheets.insertLine(resp.data, googleCredentials.Item.sheetId, row)
+                await alloy.addTransactionPanel(alloyKey, recipeId, recipeInstallId, "/templates/Transaction.template", {transaction: t, ...sheetRow}, t.id)        
+            }
             return {
                 statusCode: 200,
-                body: JSON.stringify(panel)
+                body: "{}"
             }    
         } catch (e) {
             console.error(e)
@@ -129,7 +142,7 @@ export const oauthRedirect = async (event: APIGatewayProxyEvent): Promise<APIGat
         }
     });   
 
-    const headers = ["Date", "Card",  "Merchant", "Amount", "Category", "Type", "Status", "Street", "City", "State", "Zip Code"]
+    const headers = ["Id", "Date", "Card",  "Merchant", "Amount", "Category", "Type", "Status", "Street", "City", "State", "Zip Code"]
 
     const sheet = await sheets.createSheet(resp.data, state.sheetName, headers)
 
@@ -153,7 +166,7 @@ export const oauthRedirect = async (event: APIGatewayProxyEvent): Promise<APIGat
     var rows = []
     for (let t of transactions) {
         try {
-            rows.push([DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
+            rows.push([t.id, DateTime.fromJSDate(t.transactionDate).toLocaleString(DateTime.DATETIME_SHORT, {timeZone: "America/Los_Angeles"}), t.card?.name || "", t.merchantName, t.amount, t.category?.name || "", t.transactionType, t.transactionStatus, t.streetAddress, t.city, t.state, t.zipCode]) 
         } catch (e) {
             console.error("ERROR", e)
         }

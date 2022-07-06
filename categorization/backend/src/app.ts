@@ -40,7 +40,7 @@ async function getAmountPerCategory(recipeInstallId: string) {
         return acc
     }, [uncategorized] as Array<AmountPerCategory>)
 
-    return amountPerCategory
+    return {amountPerCategory}
 }
 
 export const handleWebhook = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {    
@@ -92,12 +92,9 @@ export const handleGetCategories = async (event: APIGatewayProxyEvent): Promise<
     
     const jwt = verify(token, KLUTCH_PUBLIC_KEY, {algorithms: ["RS256"]}) as any
     const recipeInstallId = jwt["custom:principalId"]
-    var amountPerCategory = await getAmountPerCategory(recipeInstallId)        
-    if (amountPerCategory.length > 0) {
-        await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {amountPerCategory}, null, 40)       
-    }  
+    var resp = await getAmountPerCategory(recipeInstallId)         
     return {
         statusCode: 200,
-        body: JSON.stringify(amountPerCategory)
+        body: JSON.stringify(resp)
     }
 }

@@ -10,7 +10,7 @@ const config = {
   transactionEventType: process.env.TRANSACTION_EVENT_TYPE || "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
   mongoDbName: process.env.MONGODB_NAME || throwMissingVariable('MONGODB_NAME'),
   port: process.env.PORT || 3001,
-  version: process.env.APP_VERSION || '1.2.3',
+  version: process.env.APP_VERSION || '1.3.0',
 }
 
 const graphqlUrl = (config.klutchServerUrl.endsWith("/graphql") ?

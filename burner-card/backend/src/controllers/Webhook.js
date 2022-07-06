@@ -5,7 +5,8 @@ const {
   CardsService,
   Card,
   CardTerminateReason,
-  TransactionType } = require("@klutchcard/alloy-js")
+  TransactionType,
+  RecipePanelSize } = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const { BuildJWTToken } = require("./helper")
 const { recipeInstallCreatedEventType, transactionCreatedEventType } = require('../../config')
@@ -33,7 +34,9 @@ const execWebhook = async (req, resp) => {
     try {
       const recipeInstallToken = await RecipesService.getRecipeInstallToken(recipeInstallId)
       GraphQLService.setAuthToken(recipeInstallToken)
-      await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {}, null, 60)
+      const panel = await RecipesService.addPanel(
+        recipeInstallId, "/templates/Home.template", {}, null, 60, RecipePanelSize.LARGE)
+      console.log(`panel ${panel.id} added`)
       console.log(`POST /webhook "${event._alloyCardType}" finished with success`)
       return resp.status(httpStatus.OK).json()
     } catch (err) {

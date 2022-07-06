@@ -1,6 +1,6 @@
 "use strict";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { Entity, RecipesService, Transaction, TransactionService} from "@klutch-card/klutch-js"
+import { Entity, RecipePanelSize, RecipesService, Transaction, TransactionService} from "@klutch-card/klutch-js"
 import Klutch from "./klutch.js";
 import db from "./db.js"
 import auth from "./auth.js"
@@ -60,9 +60,9 @@ export const klutchWebhook = async (event: APIGatewayProxyEvent): Promise<APIGat
             const s  = subs?.find(c => c.subscriptionId == subscription.subscriptionId)!!
             s.totalPaid += transactionData.amount
             db.insert(SubscriptionTransactionTable, {recipeInstallId: recipeInstallId, subscriptionId: s.subscriptionId, subscription, transactionDate: "" + transactionDate,  ...td})            
-            panel = await RecipesService.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transactionData, subscription: s}, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
+            panel = await RecipesService.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transactionData, subscription: s}, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}), undefined, RecipePanelSize.SMALL)
         } else {
-            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template", transactionData, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}))
+            panel = await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template", transactionData, new Entity({entityID: transaction.entityID, type: "com.alloycard.core.entities.transaction.Transaction"}), undefined, RecipePanelSize.SMALL)
         }
     }
 
@@ -116,7 +116,7 @@ export const newSubscription = async (event: APIGatewayProxyEvent): Promise<APIG
     await db.insert(SubscriptionTransactionTable, {recipeInstallId: recipeInstallId, subscriptionId, transactionDate: transaction.transactionDate, ...transaction})
     const subscriptions = await fetchSubscriptions(recipeInstallId)    
     subscription = subscriptions?.find(c => c.subscriptionId == subscriptionId)
-    await Klutch.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transaction, subscription: subscription},  new Entity({entityID: transaction.id, type: "com.alloycard.core.entities.transaction.Transaction"}), token)        
+    await Klutch.addPanel(recipeInstallId, "/templates/TransactionSubscription.template", {transaction: transaction, subscription: subscription},  new Entity({entityID: transaction.id, type: "com.alloycard.core.entities.transaction.Transaction"}), token, RecipePanelSize.SMALL)        
     await refreshHomePanel(recipeInstallId, token)    
    
     return {
@@ -231,5 +231,5 @@ export const refreshHomePanel = async(recipeInstallId: string, token: string) =>
     const sumMonth = sorted?.filter(f => f.frequency === "MONTHLY").map(c => c.totalPaid).reduce((prev, current) => prev+current, 0)
     const sumYear = sorted?.filter(f => f.frequency === "YEARLY").map(c => c.totalPaid).reduce((prev, current) => prev+current, 0)
 
-    await Klutch.addPanel(recipeInstallId, "/templates/Home.template", {sumMonth, sumYear, subscriptions: sorted?.slice(0, 2)!!}, null, token)
+    await Klutch.addPanel(recipeInstallId, "/templates/Home.template", {sumMonth, sumYear, subscriptions: sorted?.slice(0, 2)!!}, null, token, RecipePanelSize.LARGE)
 }

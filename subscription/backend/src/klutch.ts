@@ -1,4 +1,4 @@
-import KlutchJS, { GraphQLService, RecipePanel, RecipesService } from "@klutch-card/klutch-js"
+import KlutchJS, { GraphQLService, RecipePanel, RecipePanelSize, RecipesService } from "@klutch-card/klutch-js"
 import {KMS}  from "aws-sdk"
 import base64url from "base64url";
 
@@ -69,9 +69,9 @@ export default new class Klutch {
         }
     }
 
-    async addPanel(recipeInstallId: string, templateFileName: string, data: Object, entity: any, jwt: string): Promise<RecipePanel>  {
+    async addPanel(recipeInstallId: string, templateFileName: string, data: Object, entity: any, jwt: string, size: RecipePanelSize): Promise<RecipePanel>  {
         GraphQLService.setAuthToken(jwt)
-        return await RecipesService.addPanel(recipeInstallId, templateFileName, data, entity)
+        return await RecipesService.addPanel(recipeInstallId, templateFileName, data, entity, undefined, size)
     }
 
 }

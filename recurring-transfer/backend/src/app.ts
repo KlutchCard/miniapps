@@ -1,4 +1,4 @@
-import { TransferService, AccountService, GraphQLService, RecipesService } from "@klutchcard/alloy-js";
+import { TransferService, AccountService, GraphQLService, RecipesService } from "@klutch-card/klutch-js";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Klutch from "./klutch.js";
 
@@ -64,7 +64,7 @@ export const lowBalanceWebhook = async (event: APIGatewayProxyEvent): Promise<AP
         const jwt = await Klutch.auth(recipeInstallId)
         GraphQLService.setAuthToken(jwt)
 
-        const balance = (await RecipesService.getAccountFromRecipeInstall(recipeId, recipeInstallId)).balance
+        const balance = (await RecipesService.getAccountFromRecipeInstall(recipeId, recipeInstallId)).revolvingLoan?.balance || 0
         
         const transfers = await TransferService.listTransfers()
 

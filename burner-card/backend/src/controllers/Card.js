@@ -5,13 +5,13 @@ const {
   CardsService,
   TransactionService,
   CardMedia
-} = require("@klutchcard/alloy-js")
+} = require("@klutch-card/klutch-js")
 const { BuildJWTToken, DecodeToken } = require('./helper')
 const BurnerCard = require('../models/Card')
 const { klutchServerUrl } = require("../../config")
-const { AlloyJS } = require('@klutchcard/alloy-js')
+const { KlutchJS } = require('@klutch-card/klutch-js')
 
-AlloyJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 
 const listBurnerCard = async (req, resp) => {
   console.log("GET /card started")

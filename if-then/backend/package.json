@@ -9,7 +9,7 @@
     "test": "mocha --timeout 15000 ./src/test/**/Test*.js -r dotenv/config"
   },
   "dependencies": {
-    "@klutch-card/klutch-js": "^1.5.21",
+    "@klutch-card/klutch-js": "^1.6.13",
     "ajv": "^8.6.2",
     "express": "^4.17.1",
     "http-status": "^1.5.0",

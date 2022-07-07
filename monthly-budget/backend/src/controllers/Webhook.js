@@ -1,6 +1,7 @@
 const {
   GraphQLService,
   RecipesService,
+  RecipePanelSize,
 } = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status')
 const { recipeId, privateKey } = require('../config/config')
@@ -42,7 +43,8 @@ const addPanelToHomeScreen = async (recipeInstallId) => {
   GraphQLService.setAuthToken(recipeInstallToken)
 
   const recipePanel = await RecipesService.addPanel(
-    recipeInstallId, "/templates/HomePanel.template", { recipeId }, null)
+    recipeInstallId, "/templates/HomePanel.template", { recipeId },
+    null, undefined, RecipePanelSize.LARGE)
 
   console.log(`home panel ${recipePanel.id} added`)
 }

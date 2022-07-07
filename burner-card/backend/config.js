@@ -11,7 +11,7 @@ const config = {
   recipeInstallCreatedEventType: process.env.RECIPE_INSTALL_EVENT_TYPE || "com.alloycard.core.entities.recipe.RecipeInstallCreatedEvent",
   transactionCreatedEventType: process.env.TRANSACTION_EVENT_TYPE || "com.alloycard.core.entities.transaction.TransactionCreatedEvent",
   port: process.env.PORT || 3002,
-  version: process.env.VERSION || "1.0.1",
+  version: process.env.VERSION || "1.1.0",
 }
 
 module.exports = { ...config }

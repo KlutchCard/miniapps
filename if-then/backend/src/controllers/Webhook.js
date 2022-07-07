@@ -5,7 +5,8 @@ const {
   GraphQLService,
   TransactionService,
   CardsService,
-  Entity
+  Entity,
+  RecipePanelSize
 } = require("@klutch-card/klutch-js")
 const httpStatus = require('http-status');
 const Automation = require('../models/Automation')
@@ -96,7 +97,9 @@ const execAutomation = async (req, resp) => {
       recipeInstallId,
       "/templates/TransactionPanel.template",
       { recipeId, merchantName: transaction.merchantName },
-      entity
+      entity,
+      undefined,
+      RecipePanelSize.SMALL
     )
 
     await Promise.all(Object.values(rules).map(rule => handleRule(rule, transaction, recipeInstallId)))
@@ -126,7 +129,9 @@ const handleRule = async ({ condition, action }, transaction, recipeInstallId) =
     recipeInstallId,
     "/templates/TransactionPanel.template",
     { condition, action },
-    entity
+    entity,
+    undefined,
+    RecipePanelSize.SMALL
   )
 }
 

@@ -1,4 +1,4 @@
-import AlloyJS, { GraphQLService, RecipePanel, RecipesService, TransferService } from "@klutchcard/alloy-js"
+import KlutchJS, { GraphQLService, RecipePanel, RecipesService, TransferService } from "@klutch-card/klutch-js"
 import {KMS}  from "aws-sdk"
 import { NumberList } from "aws-sdk/clients/iot";
 import base64url from "base64url";
@@ -16,7 +16,7 @@ export default new class Klutch {
 
 
     constructor() {
-        AlloyJS.configure({
+        KlutchJS.configure({
             serverUrl: this.serverUrl
         })
     }
@@ -68,11 +68,6 @@ export default new class Klutch {
             console.error(e)
             throw e
         }
-    }
-
-    async addPanel(recipeInstallId: string, templateFileName: string, data: Object, entity: any, jwt: string): Promise<RecipePanel>  {
-        GraphQLService.setAuthToken(jwt)
-        return await RecipesService.addPanel(recipeInstallId, templateFileName, data, entity)
     }
 
     async startTransfer(transferSourceId: string, amount: number, jwt:string) {

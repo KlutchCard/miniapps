@@ -2,13 +2,13 @@ const axios = require('axios')
 const { Router } = require("express")
 const httpStatus = require('http-status')
 const { execWebhook } = require("./controllers/Webhook")
-const AlloyJS = require("@klutchcard/alloy-js")
+const KlutchJS = require("@klutch-card/klutch-js")
 const { listBurnerCard, addBurnerCard } = require("./controllers/Card")
 const { mongoDbName, klutchServerUrl, version } = require("../config")
 const BurnerCard = require('./models/Card');
 
 const router = Router()
-AlloyJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
+KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql` })
 
 router.get("/card", listBurnerCard)
 router.post("/card", addBurnerCard)

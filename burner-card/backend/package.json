@@ -5,7 +5,7 @@
   "repository": "https://github.com/KlutchCard/miniapps",
   "scripts": {
     "start": "nodemon -r dotenv/config src/server.js",
-    "test": "clear && mocha --timeout 15000 ./src/test/**/Test*.js -r dotenv/config"
+    "test": "clear && mocha --timeout 30000 ./src/test/**/Test*.js -r dotenv/config"
   },
   "dependencies": {
     "@klutch-card/klutch-js": "^1.6.13",

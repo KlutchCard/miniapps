@@ -3,13 +3,11 @@ var assert = require('assert')
 const { KlutchJS, AuthService, RecipesService } = require("@klutch-card/klutch-js")
 const { klutchServerUrl, recipeId } = require("../../../config")
 
-KlutchJS.configure({
-    serverUrl: `${klutchServerUrl}/graphql`,
-    userPoolClientId: process.env.USER_POOL_CLIENT_ID,
-    userPoolServer: process.env.USER_POOL_SERVER
-})
 
 describe('test helper module', () => {
+    before(async () => {
+        KlutchJS.configure({ serverUrl: `${klutchServerUrl}/graphql`, userPoolClientId: process.env.USER_POOL_CLIENT_ID, userPoolServer: process.env.USER_POOL_SERVER })
+    })
 
     describe('build jwt token', () => {
         it('success', () => {

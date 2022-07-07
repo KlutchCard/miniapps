@@ -60,3 +60,5 @@ describe('test card controller', () => {
 
     })
 })
+
+module.exports = { mockResponse }

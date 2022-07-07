@@ -86,6 +86,7 @@ const execWebhook = async (req, resp) => {
     if (!cards.includes(transaction.card.id)) return resp.status(httpStatus.OK).json()
 
     await CardsService.cardCancel(new Card({ id: transaction.card.id }), CardTerminateReason.USER_REQUESTED)
+    console.log(`card ${transaction.card.id} canceled`)
   } catch (err) {
     console.log({ err, recipeInstallId })
     return resp.status(httpStatus.SERVICE_UNAVAILABLE).json({ errorMessage: err.message })

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const httpStatus = require('http-status');
 var assert = require('assert')
-const { KlutchJS, AuthService, RecipesService, CardMedia, CardStatus, CardLockState } = require("@klutch-card/klutch-js")
+const { KlutchJS, AuthService, RecipesService, CardMedia, CardStatus, CardLockState, CardsService, CardTerminateReason } = require("@klutch-card/klutch-js")
 const { mongoUrl, mongoDbName, klutchServerUrl, recipeId } = require("../../../config")
 const { addBurnerCard, listBurnerCard } = require("../../controllers/Card")
 
@@ -26,6 +26,8 @@ describe('test card controller', () => {
         token = `Bearer ${recipeInstallToken}`
     })
 
+    after(() => { mongoose.disconnect() })
+
     describe('add card resource', () => {
 
         it('fail unauthorized', async () => {
@@ -41,6 +43,7 @@ describe('test card controller', () => {
             assert.equal(card.media, CardMedia.VIRTUAL)
             assert.equal(card.status, CardStatus.PENDING)
             assert.equal(card.lockState, CardLockState.UNLOCKED)
+            CardsService.cardCancel(card, CardTerminateReason.USER_REQUESTED)
         })
 
     })

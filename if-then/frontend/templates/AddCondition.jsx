@@ -224,7 +224,10 @@ Template = (data, context) => {
       <Klutch.KView>
         <Klutch.KHeader
           showBackArrow
-          onBackArrowPressed={() => confirmButtonPressed("/templates/Main.template")}
+          onBackArrowPressed={() => {
+            context.setState({ ...context.state, condition: {} })
+            confirmButtonPressed("/templates/InitAutomation.template")
+          }}
         >
           ADD AUTOMATION
         </Klutch.KHeader>

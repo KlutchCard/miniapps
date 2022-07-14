@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "visibility": "PUBLIC",
+    "iconFile": "./images/icon.png",
+    "screenshotsPath": "./images/screenshots",
+    "templatesPath": "./templates",
+    "buildPath": "./dist",
+    "publicKeyFile": "./MyMiniappTutorial.pem",
+    "minimumKlutchVersion": "1.0.0",
+    "webhookConfiguration": {
+        "webhookUrl": "https://<<MY WEBHOOK URL>>",
+        "events": [
+            "com.alloycard.core.entities.transaction.TransactionUpdatedEvent",
+            "com.alloycard.core.entities.transaction.TransactionReversedEvent",
+            "com.alloycard.core.entities.transaction.TransactionCreatedEvent"
+        ]
+    },
+    "projectName": "MyMiniappTutorial",
+    "name": "My Miniapp Tutorial",
+    "description": "Tutorial step-by-step",
+    "longDescription": "tutorial step-by-step to teach how create a new miniapp",
+    "serverUrl": ""
+}

@@ -1,11 +1,81 @@
-Template = (data, context) => {
+const MOCK_DATA = {
+    food: { name: 'Food', value: .81, },
+    travel: { name: 'Travel', value: .05, },
+    book: { name: 'Book', value: Math.random(), },
+    pet: { name: 'Pet', value: Math.random(), },
+}
 
-    const K = Klutch
+
+Template = (data, context) => {
+    const { resources } = context.state || {}
+
+    const fetchData = async () => {
+        // const { resources } = await context.get('resource')
+        const resources = MOCK_DATA || []
+        context.setState({ resources })
+    }
+
+    if (resources === undefined) fetchData()
 
     return (
-        <Klutch.KView style={{ flex: 1, paddingBottom: 20 }}>
-            <K.KHeader>Main</K.KHeader>            
-        </Klutch.KView>   
+        <Klutch.KView style={styles.root}>
+            <Klutch.KHeader showBackArrow>My MiniApp</Klutch.KHeader>
+
+            {Object.keys(resources).map(id => <CustomBar key={id} {...resources[id]} />)}
+
+            <Klutch.KPressable
+                onPress={() => console.log("redirect to add item template")}
+                style={styles.addItem}
+            >
+                <Klutch.PlusSign />
+            </Klutch.KPressable>
+
+        </Klutch.KView>
     )
 }
 
+const CustomBar = ({ name, value }) => (
+    <Klutch.KView style={styles.customBarRoot}>
+        <Klutch.KView style={[styles.customBarFill, { width: `${100 * value}%` }]} />
+        <Klutch.KView style={styles.customBarLabelContainer}>
+            <Klutch.KText style={styles.customBarLabel}>{name}</Klutch.KText>
+            <Klutch.KText style={styles.customBarLabel}>{`${(value * 100).toFixed(0)}%`}</Klutch.KText>
+        </Klutch.KView>
+    </Klutch.KView>
+)
+
+const styles = {
+    root: {
+        flex: 1,
+        paddingBottom: 20,
+    },
+    customBarRoot: {
+        height: 40,
+        marginVertical: 8,
+        borderWidth: 1,
+    },
+    customBarFill: {
+        backgroundColor: Klutch.KlutchTheme.colors.secondary,
+        opacity: .5,
+        height: "100%",
+        position: "absolute",
+    },
+    customBarLabelContainer: {
+        flex: 1,
+        padding: 5,
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    customBarLabel: {
+        fontWeight: "bold",
+        fontSize: Klutch.KlutchTheme.font.smallSize,
+    },
+    addItem: {
+        height: 40,
+        marginVertical: 8,
+        borderWidth: .5,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+}

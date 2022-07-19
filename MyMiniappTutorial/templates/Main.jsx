@@ -19,12 +19,15 @@ Template = (data, context) => {
 
     return (
         <Klutch.KView style={styles.root}>
-            <Klutch.KHeader showBackArrow>My MiniApp</Klutch.KHeader>
+            <Klutch.KHeader showBackArrow onBackArrowPressed={context.closeMiniApp}>My MiniApp</Klutch.KHeader>
 
             {Object.keys(resources).map(id => <CustomBar key={id} {...resources[id]} />)}
 
             <Klutch.KPressable
-                onPress={() => console.log("redirect to add item template")}
+                onPress={() => {
+                    context.setState({ newValue: "" })
+                    context.loadTemplate("/templates/AddItem.template", data)
+                }}
                 style={styles.addItem}
             >
                 <Klutch.PlusSign />
@@ -68,7 +71,6 @@ const styles = {
         justifyContent: "space-between",
     },
     customBarLabel: {
-        fontWeight: "bold",
         fontSize: Klutch.KlutchTheme.font.smallSize,
     },
     addItem: {

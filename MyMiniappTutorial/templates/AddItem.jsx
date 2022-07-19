@@ -15,7 +15,7 @@ Template = (data, context) => {
             <Klutch.KHeader showBackArrow>Add Item</Klutch.KHeader>
 
             <Klutch.KTextInput
-                placeholder='name'
+                placeholder='new item'
                 value={context.state.newValue}
                 onChangeText={newValue => context.setState({ newValue })}
             />

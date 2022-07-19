@@ -5,17 +5,28 @@ const MOCK_DATA = {
     pet: { name: 'Pet', value: Math.random(), },
 }
 
+const State = {
+    loading: "loading",
+    ready: "ready",
+}
+
 
 Template = (data, context) => {
-    const { resources } = context.state || {}
+    const { state, resources } = context.state || { state: State.loading }
 
     const fetchData = async () => {
         // const { resources } = await context.get('resource')
-        const resources = MOCK_DATA || []
-        context.setState({ resources })
+        const resources = MOCK_DATA || {}
+        context.setState({ resources, state: State.ready })
     }
 
     if (resources === undefined) fetchData()
+
+    if (state === State.loading) return (
+        <Klutch.KView style={styles.loadingRoot}>
+            <Klutch.KLoadingIndicator />
+        </Klutch.KView>
+    )
 
     return (
         <Klutch.KView style={styles.root}>
@@ -35,6 +46,7 @@ Template = (data, context) => {
 
         </Klutch.KView>
     )
+
 }
 
 const CustomBar = ({ name, value }) => (
@@ -51,6 +63,11 @@ const styles = {
     root: {
         flex: 1,
         paddingBottom: 20,
+    },
+    loadingRoot: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     customBarRoot: {
         height: 40,

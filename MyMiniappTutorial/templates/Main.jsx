@@ -22,6 +22,11 @@ Template = (data, context) => {
 
     if (resources === undefined) fetchData()
 
+    const addItemHandler = () => {
+        context.setState({ newValue: "" })
+        context.loadTemplate("/templates/AddItem.template", data)
+    }
+
     if (state === State.loading) return (
         <Klutch.KView style={styles.loadingRoot}>
             <Klutch.KLoadingIndicator />
@@ -34,13 +39,7 @@ Template = (data, context) => {
 
             {Object.keys(resources).map(id => <CustomBar key={id} {...resources[id]} />)}
 
-            <Klutch.KPressable
-                onPress={() => {
-                    context.setState({ newValue: "" })
-                    context.loadTemplate("/templates/AddItem.template", data)
-                }}
-                style={styles.addItem}
-            >
+            <Klutch.KPressable style={styles.addItem} onPress={addItemHandler}>
                 <Klutch.PlusSign />
             </Klutch.KPressable>
 
@@ -82,7 +81,7 @@ const styles = {
     },
     customBarLabelContainer: {
         flex: 1,
-        padding: 5,
+        paddingHorizontal: 15,
         flexDirection: 'row',
         alignItems: "center",
         justifyContent: "space-between",

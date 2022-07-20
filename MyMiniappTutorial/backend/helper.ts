@@ -1,8 +1,9 @@
 import { KLUTCH_PUBLIC_KEY, PRIVATE_KEY, RECIPE_ID, TIMEOUT_SEC } from "./config"
-import { sign, verify } from 'jsonwebtoken'
+import { sign, SignOptions, verify } from 'jsonwebtoken'
 
 const BuildJWTToken = (): string => {
-  const header = { algorithm: "RS256", keyid: `AlloyPrincipal-${RECIPE_ID}` }
+  const privateKey = { key: PRIVATE_KEY, passphrase: "" }
+  const header: SignOptions = { algorithm: "RS256", keyid: `AlloyPrincipal-${RECIPE_ID}` }
   const payload = {
     exp: Math.floor(Date.now() / 1000) + TIMEOUT_SEC,
     iat: Math.floor(Date.now() / 1000),
@@ -11,7 +12,7 @@ const BuildJWTToken = (): string => {
     "custom:principalType": "com.alloycard.core.entities.recipe.Recipe"
   }
 
-  return sign(payload, PRIVATE_KEY, header)
+  return sign(payload, privateKey, header)
 }
 
 const DecodeToken = (jwtToken: string) => verify(jwtToken, KLUTCH_PUBLIC_KEY, { algorithms: ["RS256"] })

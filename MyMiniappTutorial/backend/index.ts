@@ -43,7 +43,8 @@ const webhookController = async (req: Request, res: Response) => {
 
         if (eventType === RECIPEINSTALL_CREATED_EVENT) {
             console.log("adding home panel", { recipeInstallId })
-            await RecipesService.addPanel(recipeInstallId, "/templates/Home.template", {}, undefined, undefined, RecipePanelSize.LARGE)
+            await RecipesService.addPanel(recipeInstallId, "/templates/Home.template",
+                {}, undefined, undefined, RecipePanelSize.LARGE)
         }
     } catch (err) {
         console.log({ err, recipeInstallId })

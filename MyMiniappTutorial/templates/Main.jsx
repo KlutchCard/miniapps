@@ -1,6 +1,6 @@
 const MOCK_DATA = {
     food: { name: 'Food', value: .81, },
-    travel: { name: 'Travel', value: .05, },
+    travel: { name: 'Travel', value: .04, },
     book: { name: 'Book', value: Math.random(), },
     pet: { name: 'Pet', value: Math.random(), },
 }

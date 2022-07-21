@@ -25,11 +25,7 @@ Template = (data, context) => {
 
     if (resources === undefined) fetchData()
 
-    if (state === State.loading) return (
-        <Klutch.KView >
-            <Klutch.KLoadingPanelProgress />
-        </Klutch.KView>
-    )
+    if (state === State.loading) return <LoadingScreen />
 
     return (
         <Klutch.KView style={styles.root}>
@@ -37,6 +33,12 @@ Template = (data, context) => {
         </Klutch.KView>
     )
 }
+
+const LoadingScreen = () => (
+    <Klutch.KView >
+        <Klutch.KLoadingPanelProgress />
+    </Klutch.KView>
+)
 
 const CustomBox = ({ name, value }) => (
     <Klutch.KView style={styles.customBoxRoot}>

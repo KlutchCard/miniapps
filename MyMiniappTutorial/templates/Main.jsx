@@ -30,11 +30,7 @@ Template = (data, context) => {
         context.loadTemplate("/templates/AddItem.template", data)
     }
 
-    if (state === State.loading) return (
-        <Klutch.KView style={styles.loadingRoot}>
-            <Klutch.KLoadingIndicator />
-        </Klutch.KView>
-    )
+    if (state === State.loading) return <LoadingScreen />
 
     return (
         <Klutch.KView style={styles.root}>
@@ -50,6 +46,12 @@ Template = (data, context) => {
     )
 
 }
+
+const LoadingScreen = () => (
+    <Klutch.KView style={styles.loadingRoot}>
+        <Klutch.KLoadingIndicator />
+    </Klutch.KView>
+)
 
 const CustomBar = ({ name, value }) => (
     <Klutch.KView style={styles.customBarRoot}>

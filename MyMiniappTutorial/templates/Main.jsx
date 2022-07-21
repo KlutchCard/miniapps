@@ -3,6 +3,9 @@ const MOCK_DATA = {
     travel: { name: 'Travel', value: .04, },
     book: { name: 'Book', value: Math.random(), },
     pet: { name: 'Pet', value: Math.random(), },
+    eletronics: { name: 'Eletronic', value: .44, },
+    cigar: { name: 'Cigar', value: Math.random(), },
+    subscription: { name: 'Subscription', value: Math.random(), },
 }
 
 const State = {

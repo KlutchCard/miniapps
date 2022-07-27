@@ -1,0 +1,23 @@
+{
+    "version": 1,
+    "visibility": "PUBLIC",
+    "iconFile": "./images/icon.png",
+    "screenshotsPath": "./images/screenshots",
+    "templatesPath": "./templates",
+    "buildPath": "./dist",
+    "publicKeyFile": "./miniappArticle.pem",
+    "minimumKlutchVersion": "1.0.0",
+    "webhookConfiguration": {
+        "webhookUrl": "https://<<MY WEBHOOK URL>>",
+        "events": [
+            "com.alloycard.core.entities.transaction.TransactionUpdatedEvent",
+            "com.alloycard.core.entities.transaction.TransactionReversedEvent",
+            "com.alloycard.core.entities.transaction.TransactionCreatedEvent"
+        ]
+    },
+    "projectName": "miniappArticle",
+    "name": "Medium Miniapp",
+    "description": "miniapp from medium article",
+    "longDescription": "miniapp designed to help new developers",
+    "serverUrl": ""
+}

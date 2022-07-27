@@ -49,12 +49,13 @@ const webhookController = async (req: Request, res: Response) => {
 
         if (eventType === TRANSACTION_CREATED_EVENT) {
             const transactionId = event.transaction.entityID
-            console.log("adding transaction panel", { recipeInstallId, transactionId })
             const entity = new Entity(
                 { entityID: transactionId, type: "com.alloycard.core.entities.transaction.Transaction", }
             )
+            const data = { name: 'Cookie', value: Math.random(), }
+            console.log("adding transaction panel", { recipeInstallId, entity, data })
             await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template",
-                {}, entity, undefined, RecipePanelSize.SMALL)
+                data, entity, undefined, RecipePanelSize.SMALL)
         }
     } catch (err) {
         console.log({ err, recipeInstallId })

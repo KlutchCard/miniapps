@@ -1,8 +1,8 @@
-import { GraphQLService, RecipesService, KlutchJS, RecipePanelSize, } from "@klutch-card/klutch-js"
+import { GraphQLService, RecipesService, KlutchJS, RecipePanelSize, Entity, } from "@klutch-card/klutch-js"
 import express, { NextFunction, Request, Response } from "express"
 import axios from "axios"
 import { BuildJWTToken } from "./helper"
-import { PORT, RECIPEINSTALL_CREATED_EVENT, SERVER_URL } from "./config"
+import { PORT, RECIPEINSTALL_CREATED_EVENT, SERVER_URL, TRANSACTION_CREATED_EVENT } from "./config"
 
 
 KlutchJS.configure({ serverUrl: `${SERVER_URL}/graphql` })
@@ -45,6 +45,16 @@ const webhookController = async (req: Request, res: Response) => {
             console.log("adding home panel", { recipeInstallId })
             await RecipesService.addPanel(recipeInstallId, "/templates/Home.template",
                 {}, undefined, undefined, RecipePanelSize.LARGE)
+        }
+
+        if (eventType === TRANSACTION_CREATED_EVENT) {
+            const transactionId = event.transaction.entityID
+            console.log("adding transaction panel", { recipeInstallId, transactionId })
+            const entity = new Entity(
+                { entityID: transactionId, type: "com.alloycard.core.entities.transaction.Transaction", }
+            )
+            await RecipesService.addPanel(recipeInstallId, "/templates/Transaction.template",
+                {}, entity, undefined, RecipePanelSize.SMALL)
         }
     } catch (err) {
         console.log({ err, recipeInstallId })
